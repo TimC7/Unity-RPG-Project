@@ -8,6 +8,8 @@ public class OverworldEnemy : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
 
+    public GameObject player;
+
     public enum State { Idle, Move };
     public State currentState;
 
@@ -35,7 +37,8 @@ public class OverworldEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        idleOrMove();
+
+        decision();
 
         switch (currentState)
         {
@@ -60,7 +63,7 @@ public class OverworldEnemy : MonoBehaviour
         
     }
 
-    public void idleOrMove()
+    public void decision()
     {
         if (Time.time - lastChoice > timeBetweenChoices)
         {
