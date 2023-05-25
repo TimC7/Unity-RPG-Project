@@ -23,8 +23,8 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 hitBoxSize = new Vector2(.5f, .5f), hitBoxLocation;
 
     public int level = 1;
-    public int currentHealth = 20;
-    public int maxHealth = 20;
+    public int currentHealth = 3;
+    public int maxHealth = 3;
     public int str = 1;
     public HealthBar healthBar;
 
@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     private int currentTurn = 0;
 
- 
+
 
     private void setIsBattle()
     {
@@ -114,11 +114,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
-    }
-
 
     public void attack()
     {
@@ -147,10 +142,10 @@ public class PlayerMovement : MonoBehaviour
         currentHealth -= damage;
 
         healthBar.SetHealth(currentHealth);
-        /*if (currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             gameObject.SetActive(false);
-        } */
+        }
     }
 
     public void healByAmount(int amount)
@@ -236,6 +231,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+
     public void isAttackingOn()
     {
         //Debug.Log("isAttackingOn()");
@@ -252,5 +249,20 @@ public class PlayerMovement : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetHealth(currentHealth);
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        Debug.Log("Player collided with something");
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Player collided with enemy.");
+            if (col.gameObject.GetComponent<OverworldEnemy>() != null)
+            {
+                takeDamage(col.gameObject.GetComponent<OverworldEnemy>().str);
+            }
+            else
+            { Debug.Log("Enemy does not have OverworldEnemy script"); }
+        }
     }
 }

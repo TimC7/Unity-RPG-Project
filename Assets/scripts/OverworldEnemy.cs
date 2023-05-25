@@ -10,6 +10,7 @@ public class OverworldEnemy : MonoBehaviour
 
     public int health = 3;
     public int maxHealth = 3;
+    public int str = 1;
 
     public GameObject player;
 

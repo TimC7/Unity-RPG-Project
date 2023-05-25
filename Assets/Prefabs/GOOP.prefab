@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 3333166300577140444}
   - component: {fileID: 3333166300577140435}
   - component: {fileID: 6222951523388242631}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GOOP
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,6 +148,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  animator: {fileID: 0}
+  health: 3
+  maxHealth: 3
+  str: 1
+  player: {fileID: 0}
   currentState: 0
   direction: {x: 0, y: 0, z: 0}
   speed: 1
