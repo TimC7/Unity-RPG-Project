@@ -8,6 +8,9 @@ public class OverworldEnemy : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
 
+    public int health = 3;
+    public int maxHealth = 3;
+
     public GameObject player;
 
     public enum State { Idle, Move };
@@ -27,6 +30,8 @@ public class OverworldEnemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        player = GameObject.FindWithTag("Player");
 
         randomDirection();
         direction.Normalize();
@@ -107,6 +112,15 @@ public class OverworldEnemy : MonoBehaviour
         animator.SetFloat("Direction", lastXDirection);
     }
 
+    public void takeDamage(int damage)
+    {
+        health -= damage;
+        if(health <= 0)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Wall"))
@@ -125,8 +139,10 @@ public class OverworldEnemy : MonoBehaviour
             if (col.gameObject.CompareTag("Player Attack"))
             {
                 Debug.Log("I got attacked!");
-                SceneManager.LoadScene("dungeon_battle");
+                takeDamage(player.GetComponent<PlayerMovement>().str);
+                
             }
         }
     }
+    
 }
