@@ -44,23 +44,44 @@ public class OverworldEnemy : MonoBehaviour
     void Update()
     {
 
-        decision();
-
-        switch (currentState)
+        // Check if the player is within a certain distance
+        if (Vector3.Distance(transform.position, player.transform.position) < 10f)
         {
-            case State.Idle:
-                animator.SetTrigger("Idle");
-                break;
-            case State.Move:
-                animator.SetTrigger("Moving");
-                if (Time.time - lastChange > timeBetweenDirectionChanges)
-                {
-                    randomDirection();
-                    direction.Normalize();
-                    lastChange = Time.time;
-                }
-                transform.position += direction * speed * Time.deltaTime;
-                break;
+            // Calculate the direction to the player
+            animator.SetTrigger("Moving");
+            direction = player.transform.position - transform.position;
+            direction.Normalize();
+            if(direction.x >0)
+                lastXDirection = 1;
+            else
+                lastXDirection = -1;
+            animator.SetFloat("Direction", lastXDirection);
+
+            Debug.Log(lastXDirection);
+            // Move towards the player
+            rb.velocity = direction * speed;
+        }
+        else
+        {
+            // Stop moving if the player is far away
+            //rb.velocity = Vector2.zero;
+            decision();
+            switch (currentState)
+            {
+                case State.Idle:
+                    animator.SetTrigger("Idle");
+                    break;
+                case State.Move:
+                    animator.SetTrigger("Moving");
+                    if (Time.time - lastChange > timeBetweenDirectionChanges)
+                    {
+                        randomDirection();
+                        direction.Normalize();
+                        lastChange = Time.time;
+                    }
+                    transform.position += direction * speed * Time.deltaTime;
+                    break;
+            }
         }
     }
 
@@ -112,6 +133,7 @@ public class OverworldEnemy : MonoBehaviour
 
         animator.SetFloat("Direction", lastXDirection);
     }
+
 
     public void takeDamage(int damage)
     {
