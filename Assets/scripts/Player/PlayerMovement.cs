@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     private GameObject partner;
     [SerializeField]
     private GameObject mainCamera;
+    [SerializeField]
+    SpriteRenderer sr;
 
     public bool isBattle = false;
     public bool isAttacking = false;
@@ -43,23 +45,19 @@ public class PlayerMovement : MonoBehaviour
 
     private int currentTurn = 0;
 
+    float invincibilityDuration = 1.0f;
+    bool isInvincible = false;
+    Color spriteColor;
 
-
-    private void setIsBattle()
-    {
-        isBattle = gameObject.GetComponent<GameManager>().isBattle;
-        Debug.Log("this is a battle");
-    }
-
-    private void setCurrentTurn()
-    {
-        currentTurn = gameObject.GetComponent<TurnManager>().getCurrentTurn();
-    }
+    ContactPoint2D contact;
+    Vector3 collisionDirection;
+    public float knockBackForce = 10, knockBackCounter, knockBackTotalTime;
+    
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
+        sr = GetComponent<SpriteRenderer>();
         // Probably need to change these for scene transitions
         currentHealth = maxHealth;
         if (healthBar != null)
@@ -67,6 +65,9 @@ public class PlayerMovement : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
         }
         else Debug.Log("healthBar not found.");
+        invincibilityDuration = .2f;
+        knockBackForce = 10;
+        knockBackTotalTime = .1f;
         setLevel();
         setStrength();
     }
@@ -78,39 +79,38 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!isBattle)
+        
+        if (!isAttacking)
         {
-            if (!isAttacking)
-            {
-                moveHorizontal = Input.GetAxisRaw("Horizontal");
-                moveVertical = Input.GetAxisRaw("Vertical");
-            }
-            else
-            {
-                moveHorizontal = 0f;
-                moveVertical = 0f;
-            }
-
-
-            attack();
-            switchControl();
-            animate();
+            moveHorizontal = Input.GetAxisRaw("Horizontal");
+            moveVertical = Input.GetAxisRaw("Vertical");
         }
         else
         {
-
+            moveHorizontal = 0f;
+            moveVertical = 0f;
         }
+
+        attack();
+        //switchControl();
+        animate();
     }
 
     void FixedUpdate()
     {
-        if (!isAttacking)
+        if (!isAttacking && knockBackCounter <= 0)
         {
             rb.velocity = new Vector2(moveHorizontal * speed, moveVertical * speed);
+            //Debug.Log(rb.velocity);
+        }
+        else if (isAttacking)
+        {
+            rb.velocity = Vector2.zero;
         }
         else
         {
-            rb.velocity = Vector2.zero;
+            rb.velocity = collisionDirection * knockBackForce;
+            knockBackCounter -= Time.deltaTime;
         }
     }
 
@@ -123,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /*
     public void switchControl()
     {
         if (Input.GetButtonDown("Fire2"))
@@ -136,16 +137,34 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
-
+    */
     public void takeDamage(int damage)
     {
-        currentHealth -= damage;
-
-        healthBar.SetHealth(currentHealth);
-        if (currentHealth <= 0)
+        if (!isInvincible)
         {
-            gameObject.SetActive(false);
+            currentHealth -= damage;
+
+            healthBar.SetHealth(currentHealth);
+            if (currentHealth <= 0)
+            {
+                gameObject.SetActive(false);
+            }
+            StartCoroutine(invincibilityTimer());
         }
+    }
+
+    IEnumerator invincibilityTimer()
+    {
+        isInvincible = true;
+        spriteColor = sr.color;
+        spriteColor.a = 0.5f;
+        sr.color = spriteColor;
+
+        yield return new WaitForSeconds(invincibilityDuration);
+
+        spriteColor.a = 1f;
+        sr.color = spriteColor;
+        isInvincible = false;
     }
 
     public void healByAmount(int amount)
@@ -257,6 +276,9 @@ public class PlayerMovement : MonoBehaviour
         if (col.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Player collided with enemy.");
+            contact = col.contacts[0];
+            collisionDirection = contact.normal;
+            knockBackCounter = knockBackTotalTime;
             if (col.gameObject.GetComponent<OverworldEnemy>() != null)
             {
                 takeDamage(col.gameObject.GetComponent<OverworldEnemy>().str);

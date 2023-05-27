@@ -57,7 +57,7 @@ public class OverworldEnemy : MonoBehaviour
                 lastXDirection = -1;
             animator.SetFloat("Direction", lastXDirection);
 
-            Debug.Log(lastXDirection);
+            //Debug.Log(lastXDirection);
             // Move towards the player
             rb.velocity = direction * speed;
         }

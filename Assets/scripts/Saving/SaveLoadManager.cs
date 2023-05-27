@@ -7,7 +7,8 @@ public class SaveLoadManager : MonoBehaviour
 {
     private GameData gameData;
     public GameManager gameManager;
-    public PlayerMovement max, lucia;
+    public PlayerMovement max; 
+    //public PlayerMovement lucia;
     public Inventory inventory;
     public static SaveLoadManager instance { get; private set; }
 
@@ -39,10 +40,12 @@ public class SaveLoadManager : MonoBehaviour
         gameData.partyGold = inventory.gold;
         gameData.currentFloor = gameManager.currentFloor;
         gameData.maxLevel = max.level; gameData.maxExp = max.exp; gameData.maxMaxHealth = max.maxHealth; 
-        gameData.maxCurrentHealth = max.currentHealth; gameData.maxStr = max.str; gameData.luciaLevel = lucia.level; 
+        gameData.maxCurrentHealth = max.currentHealth; gameData.maxStr = max.str; 
+        /*
+        gameData.luciaLevel = lucia.level; 
         gameData.luciaExp = lucia.exp; gameData.luciaMaxHealth = lucia.maxHealth; 
         gameData.luciaCurrentHealth = lucia.currentHealth; gameData.luciaStr = lucia.str; gameData.luciaLevel = lucia.level;
-
+        */
         string json = JsonUtility.ToJson(gameData);
 
         File.WriteAllText(Application.persistentDataPath + "/savedGame.json", json.ToString());
@@ -65,8 +68,10 @@ public class SaveLoadManager : MonoBehaviour
             gameManager.currentFloor = gameData.currentFloor;
             max.level = gameData.maxLevel; max.exp = gameData.maxExp; max.maxHealth = gameData.maxMaxHealth; 
             max.currentHealth = gameData.maxCurrentHealth; max.str = gameData.maxStr;
+            /*
             lucia.exp = gameData.luciaExp; lucia.maxHealth = gameData.luciaMaxHealth;
             lucia.currentHealth = gameData.luciaCurrentHealth; lucia.str = gameData.luciaStr; lucia.level = gameData.luciaLevel;
+            */
         }
         else
         {
@@ -77,8 +82,10 @@ public class SaveLoadManager : MonoBehaviour
             gameManager.currentFloor = gameData.currentFloor;
             max.level = gameData.maxLevel; max.exp = gameData.maxExp; max.maxHealth = gameData.maxMaxHealth;
             max.currentHealth = gameData.maxCurrentHealth; max.str = gameData.maxStr;
+            /*
             lucia.exp = gameData.luciaExp; lucia.maxHealth = gameData.luciaMaxHealth;
             lucia.currentHealth = gameData.luciaCurrentHealth; lucia.str = gameData.luciaStr; lucia.level = gameData.luciaLevel;
+            */
         }
     }
 
