@@ -19,10 +19,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     SpriteRenderer sr;
 
+   // public OverworldEnemy goop;
+   // public Vector3 jumpBackDirection = new Vector3(-1f, 0f, 0f);
+
     public bool isBattle = false;
     public bool isAttacking = false;
     private Collider2D hitBox;
-    public Vector2 hitBoxSize = new Vector2(.5f, .5f), hitBoxLocation;
+    public Vector2 hitBoxSize = new Vector3(.5f, .5f), hitBoxLocation;
 
     public int level = 1;
     public int currentHealth = 3;
@@ -55,7 +58,8 @@ public class PlayerMovement : MonoBehaviour
     
 
     private void Start()
-    {
+    { 
+
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         // Probably need to change these for scene transitions
@@ -120,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             animator.SetTrigger("Attack");
+            //goop.takeDamage(jumpBackDirection);
         }
     }
 

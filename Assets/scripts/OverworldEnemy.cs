@@ -8,6 +8,9 @@ public class OverworldEnemy : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
 
+    public float pushBackForce = 5f; // Adjust the force as needed
+    public SpriteRenderer spriteRenderer;
+
     public int health = 3;
     public int maxHealth = 3;
     public int str = 1;
@@ -29,8 +32,10 @@ public class OverworldEnemy : MonoBehaviour
 
     void Start()
     {
+        
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         player = GameObject.FindWithTag("Player");
 
@@ -39,6 +44,7 @@ public class OverworldEnemy : MonoBehaviour
         currentState = State.Move;
         
     }
+
 
     // Update is called once per frame
     void Update()
@@ -135,13 +141,26 @@ public class OverworldEnemy : MonoBehaviour
     }
 
 
-    public void takeDamage(int damage)
+    public void takeDamage(int damage) //, Vector3 jumpBackDirection posible parameter
     {
         health -= damage;
-        if(health <= 0)
+        animator.SetTrigger("Damage");
+        spriteRenderer.color = Color.red;
+        StartCoroutine(ResetColorAfterDelay(0.5f)); // Adjust the duration as needed
+        rb.AddForce(new Vector2(0f, -1f) * pushBackForce, ForceMode2D.Impulse); // Adjust the push back direction as needed (still needs to be adjusted)
+        if (health <= 0)
         {
+
+            //rb.AddForce(jumpBackDirection * jumpBackForce, ForceMode2D.Impulse);
+
             gameObject.SetActive(false);
         }
+    }
+
+    private IEnumerator ResetColorAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        spriteRenderer.color = Color.white; // Set it back to the original color
     }
 
     private void OnCollisionEnter2D(Collision2D col)
