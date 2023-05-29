@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         if (gameOverScreen != null)
         {
             gameOverScreen.SetActive(true);
+            EnableGameOverChildren();
         }
         else
             Debug.Log("GameManager: gameOverScreen is null.");
@@ -44,6 +45,15 @@ public class GameManager : MonoBehaviour
     public void giveUp()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void EnableGameOverChildren()
+    {
+        for (int i = 0; i < gameOverScreen.transform.childCount; i++)
+        {
+            GameObject child = gameOverScreen.transform.GetChild(i).gameObject;
+            child.SetActive(true);
+        }
     }
 }
 

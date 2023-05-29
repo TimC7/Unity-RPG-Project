@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 1237750274020903672}
   - component: {fileID: 1237750274020903675}
   - component: {fileID: 1237750274020903674}
+  - component: {fileID: 1043238077316961814}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -438,6 +439,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1043238077316961814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237750274020903677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d825beac984262a4dbe5a49bc06470d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideInSceneView: 0
 --- !u!1 &8315717754431830148
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8315717754473465213}
+  - component: {fileID: 3399338799499829147}
   m_Layer: 5
   m_Name: Game Over Screen
   m_TagString: Game Over
@@ -613,6 +628,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3399338799499829147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8315717754473465214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d825beac984262a4dbe5a49bc06470d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideInSceneView: 0
 --- !u!1 &8315717754482471812
 GameObject:
   m_ObjectHideFlags: 0

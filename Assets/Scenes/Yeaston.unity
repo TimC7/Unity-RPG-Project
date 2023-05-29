@@ -10006,6 +10006,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3399338799499829147, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: hideInSceneView
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315717754431830148, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8315717754431830266, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -10014,6 +10022,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: giveUp
       objectReference: {fileID: 0}
+    - target: {fileID: 8315717754473465214, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8315717754684310857, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -10021,6 +10033,26 @@ PrefabInstance:
     - target: {fileID: 8315717754684310857, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: tryAgain
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315717754684310859, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315717754824439936, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315717755359282061, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315717755478605841, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315717755478605852, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
