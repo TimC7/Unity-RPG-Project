@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     private GameObject mainCamera;
     [SerializeField]
     SpriteRenderer sr;
+    [SerializeField]
+    GameManager gm;
 
    // public OverworldEnemy goop;
    // public Vector3 jumpBackDirection = new Vector3(-1f, 0f, 0f);
@@ -31,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public int currentHealth = 3;
     public int maxHealth = 3;
     public int str = 1;
-    public HealthBar healthBar;
+    
 
     public int exp;
     public int expThreshold = 100;
@@ -40,13 +42,14 @@ public class PlayerMovement : MonoBehaviour
 
     public int gold;
 
-    public TextMeshProUGUI Level;
-    public TextMeshProUGUI Strength;
+    public HealthBar healthBar;
+    public TextMeshProUGUI levelDisplay;
+    public TextMeshProUGUI strengthDisplay;
 
     private float moveHorizontal, moveVertical;
     Vector2 currentVelocity;
 
-    private int currentTurn = 0;
+    //private int currentTurn = 0;
 
     float invincibilityDuration = 1.0f;
     bool isInvincible = false;
@@ -62,8 +65,16 @@ public class PlayerMovement : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
         // Probably need to change these for scene transitions
         currentHealth = maxHealth;
+
+        healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
+        levelDisplay = GameObject.Find("Level Display").GetComponent<TextMeshProUGUI>();
+        strengthDisplay = GameObject.Find("Strength Display").GetComponent<TextMeshProUGUI>();
+
+        healthBar.SetHealth(currentHealth);
+
         if (healthBar != null)
         {
             healthBar.SetMaxHealth(maxHealth);
@@ -151,11 +162,16 @@ public class PlayerMovement : MonoBehaviour
 
             healthBar.SetHealth(currentHealth);
             if (currentHealth <= 0)
-            {
-                gameObject.SetActive(false);
-            }
-            StartCoroutine(invincibilityTimer());
+                gameOver();
+            else
+                StartCoroutine(invincibilityTimer());
         }
+    }
+
+    public void gameOver()
+    {
+        gm.gameOver();
+        gameObject.SetActive(false);
     }
 
     IEnumerator invincibilityTimer()
@@ -215,13 +231,13 @@ public class PlayerMovement : MonoBehaviour
 
     public void setLevel()
     {
-        Level.text = "Level: " + level.ToString();
+        levelDisplay.text = "Level: " + level.ToString();
 
     }
 
     public void setStrength()
     {
-        Strength.text = "Strength: " + str.ToString();
+        strengthDisplay.text = "Strength: " + str.ToString();
     }
 
     public void animate()

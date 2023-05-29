@@ -13,11 +13,13 @@ public class GameData
     public GameData()
     {
         //inventory = new List<string>();
-        this.partyGold = 500; this.currentFloor = 2; // First level is 2, Yeaston is 1
-        this.maxLevel = 1; this.maxExp = 0; this.maxMaxHealth = 20;
-        this.maxCurrentHealth = 20; this.maxStr = 1;
+        this.partyGold = 100; this.currentFloor = 2; // First level is 2, Yeaston is 1
+        this.maxLevel = 1; this.maxExp = 0; this.maxMaxHealth = 3;
+        this.maxCurrentHealth = 3; this.maxStr = 1;
 
+        /*
         this.luciaLevel = 1; this.luciaExp = 0; this.luciaMaxHealth = 20;
         this.luciaCurrentHealth = 20; this.luciaStr = 1;
+        */
     }
 }

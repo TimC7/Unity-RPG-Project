@@ -7,6 +7,7 @@ TagManager:
   - Wall
   - Player Attack
   - Enemy
+  - Game Over
   layers:
   - Default
   - TransparentFX

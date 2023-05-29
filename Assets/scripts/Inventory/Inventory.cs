@@ -19,6 +19,7 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        goldAmount = GameObject.Find("Gold Display").GetComponent<TextMeshProUGUI>();
         setGoldAmount();
     }
     public void AddItem(string itemName)

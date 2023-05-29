@@ -42,7 +42,7 @@ public class ShopGuy : MonoBehaviour
                 {
                     inv.takeMoney(price);
                     max.strUp(strIncrement);
-                    lucia.strUp(strIncrement);
+                    //lucia.strUp(strIncrement);
                 }
                 else
                 {
