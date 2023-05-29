@@ -8,7 +8,7 @@ public class OverworldEnemy : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
 
-    public float pushBackForce = 5f; // Adjust the force as needed
+    public float knockBackForce, knockBackCounter, knockBackTotalTime;// Adjust the force as needed
     public SpriteRenderer spriteRenderer;
 
     public int health = 3;
@@ -19,6 +19,9 @@ public class OverworldEnemy : MonoBehaviour
 
     public enum State { Idle, Move };
     public State currentState;
+
+    public Vector2 Kdirection;
+    public Vector2 collisionDirection;
 
     public Vector3 direction;
     private int rando;
@@ -37,6 +40,9 @@ public class OverworldEnemy : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        knockBackForce = 10;
+        knockBackTotalTime = .1f;
+
         player = GameObject.FindWithTag("Player");
 
         randomDirection();
@@ -49,45 +55,55 @@ public class OverworldEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        // Check if the player is within a certain distance
-        if (Vector3.Distance(transform.position, player.transform.position) < 10f)
+        if (knockBackCounter <= 0)
         {
-            // Calculate the direction to the player
-            animator.SetTrigger("Moving");
-            direction = player.transform.position - transform.position;
-            direction.Normalize();
-            if(direction.x >0)
-                lastXDirection = 1;
-            else
-                lastXDirection = -1;
-            animator.SetFloat("Direction", lastXDirection);
 
-            //Debug.Log(lastXDirection);
-            // Move towards the player
-            rb.velocity = direction * speed;
+            // Check if the player is within a certain distance
+            if (Vector3.Distance(transform.position, player.transform.position) < 10f)
+            {
+                // Calculate the direction to the player
+                animator.SetTrigger("Moving");
+                direction = player.transform.position - transform.position;
+                direction.Normalize();
+                if (direction.x > 0)
+                    lastXDirection = 1;
+                else
+                    lastXDirection = -1;
+                animator.SetFloat("Direction", lastXDirection);
+
+                //Debug.Log(lastXDirection);
+                // Move towards the player
+                rb.velocity = direction * speed;
+            }
+
+            else
+            {
+                // Stop moving if the player is far away
+                //rb.velocity = Vector2.zero;
+                decision();
+                switch (currentState)
+                {
+                    case State.Idle:
+                        animator.SetTrigger("Idle");
+                        break;
+                    case State.Move:
+                        animator.SetTrigger("Moving");
+                        if (Time.time - lastChange > timeBetweenDirectionChanges)
+                        {
+                            randomDirection();
+                            direction.Normalize();
+                            lastChange = Time.time;
+                        }
+                        transform.position += direction * speed * Time.deltaTime;
+                        break;
+                }
+            }
         }
         else
         {
-            // Stop moving if the player is far away
-            //rb.velocity = Vector2.zero;
-            decision();
-            switch (currentState)
-            {
-                case State.Idle:
-                    animator.SetTrigger("Idle");
-                    break;
-                case State.Move:
-                    animator.SetTrigger("Moving");
-                    if (Time.time - lastChange > timeBetweenDirectionChanges)
-                    {
-                        randomDirection();
-                        direction.Normalize();
-                        lastChange = Time.time;
-                    }
-                    transform.position += direction * speed * Time.deltaTime;
-                    break;
-            }
+            rb.velocity = Kdirection * knockBackForce;
+            knockBackCounter -= Time.deltaTime;
+            //Debug.Log(Kdirection);
         }
     }
 
@@ -144,15 +160,12 @@ public class OverworldEnemy : MonoBehaviour
     public void takeDamage(int damage) //, Vector3 jumpBackDirection posible parameter
     {
         health -= damage;
-        animator.SetTrigger("Damage");
+        //animator.SetTrigger("Damage");
         spriteRenderer.color = Color.red;
         StartCoroutine(ResetColorAfterDelay(0.5f)); // Adjust the duration as needed
-        rb.AddForce(new Vector2(0f, -1f) * pushBackForce, ForceMode2D.Impulse); // Adjust the push back direction as needed (still needs to be adjusted)
+        //rb.AddForce(new Vector2(0f, -1f) * pushBackForce, ForceMode2D.Impulse); // Adjust the push back direction as needed (still needs to be adjusted)
         if (health <= 0)
         {
-
-            //rb.AddForce(jumpBackDirection * jumpBackForce, ForceMode2D.Impulse);
-
             gameObject.SetActive(false);
         }
     }
@@ -180,9 +193,58 @@ public class OverworldEnemy : MonoBehaviour
         {
             if (col.gameObject.CompareTag("Player Attack"))
             {
+
                 Debug.Log("I got attacked!");
                 takeDamage(player.GetComponent<PlayerMovement>().str);
+
+                // Get the direction from this object to the other object
+                Vector2 collisionDirection = col.transform.position - transform.position;
                 
+
+                // Normalize the direction vector if needed
+                collisionDirection.Normalize();
+
+                knockBackCounter = knockBackTotalTime;
+
+                float dotUp = Vector2.Dot(collisionDirection, Vector2.up);
+                float dotDown = Vector2.Dot(collisionDirection, Vector2.down);
+                float dotLeft = Vector2.Dot(collisionDirection, Vector2.left);
+                float dotRight = Vector2.Dot(collisionDirection, Vector2.right);
+
+                // Set a threshold to determine the collision direction
+                float angleThreshold = 0.5f; // Adjust this value based on your requirements
+
+                // Check the dot products against the threshold to determine the collision direction
+                if (dotUp >= angleThreshold)
+                {
+                    Kdirection = Vector2.down;
+                    // Trigger enter from the up direction
+                    Debug.Log("Trigger enter from up direction.");
+                }
+                else if (dotDown >= angleThreshold)
+                {
+                    Kdirection = Vector2.up;
+                    // Trigger enter from the down direction
+                    Debug.Log("Trigger enter from down direction.");
+                }
+                else if (dotLeft >= angleThreshold)
+                {
+                    Kdirection = Vector2.right;
+                    // Trigger enter from the left direction
+                    Debug.Log("Trigger enter from left direction.");
+                }
+                else if (dotRight >= angleThreshold)
+                {
+                    Kdirection = Vector2.left;
+
+                    // Trigger enter from the right direction
+                    Debug.Log(Kdirection);
+                }
+                else
+                {
+                    // Collision from a non-perfect direction
+                    Debug.Log("Trigger enter from a non-perfect direction.");
+                }
             }
         }
     }
