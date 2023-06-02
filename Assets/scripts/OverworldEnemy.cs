@@ -23,6 +23,8 @@ public class OverworldEnemy : MonoBehaviour
     public Vector2 Kdirection;
     public Vector2 collisionDirection;
 
+    public bool canMove = true;
+
     public Vector3 direction;
     private int rando;
     public float speed = 1f;
@@ -35,7 +37,7 @@ public class OverworldEnemy : MonoBehaviour
 
     void Start()
     {
-        
+        canMove = true;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -55,7 +57,7 @@ public class OverworldEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (knockBackCounter <= 0)
+        if (knockBackCounter <= 0 && canMove) 
         {
 
             // Check if the player is within a certain distance
@@ -99,8 +101,9 @@ public class OverworldEnemy : MonoBehaviour
                 }
             }
         }
-        else
+        else if(canMove)
         {
+
             rb.velocity = Kdirection * knockBackForce;
             knockBackCounter -= Time.deltaTime;
             //Debug.Log(Kdirection);
@@ -130,6 +133,7 @@ public class OverworldEnemy : MonoBehaviour
             lastChoice = Time.time;
         }
     }
+
 
     public void randomDirection()
     {
@@ -166,10 +170,19 @@ public class OverworldEnemy : MonoBehaviour
         //rb.AddForce(new Vector2(0f, -1f) * pushBackForce, ForceMode2D.Impulse); // Adjust the push back direction as needed (still needs to be adjusted)
         if (health <= 0)
         {
-            gameObject.SetActive(false);
+            canMove = false;
+            rb.velocity = Vector2.zero;
+            rb.isKinematic = true;
+            animator.SetTrigger("Death"); //disabled object called from animation
+
         }
     }
 
+    public void disableObject()
+    {
+        Debug.Log("deez");
+        gameObject.SetActive(false);
+    }
     private IEnumerator ResetColorAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -186,6 +199,7 @@ public class OverworldEnemy : MonoBehaviour
         {
             Debug.Log("This frikkn guy");
         }
+
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
