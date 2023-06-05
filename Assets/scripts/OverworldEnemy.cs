@@ -23,6 +23,8 @@ public class OverworldEnemy : MonoBehaviour
     public Vector2 Kdirection;
     public Vector2 collisionDirection;
 
+    public bool canMove = true;
+
     public Vector3 direction;
     private int rando;
     public float speed = 1f;
@@ -32,10 +34,11 @@ public class OverworldEnemy : MonoBehaviour
     private float lastChange = 3f;
 
     private int lastXDirection = 1;
+    
 
     void Start()
     {
-        
+        canMove = true;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -55,7 +58,7 @@ public class OverworldEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (knockBackCounter <= 0)
+        if (knockBackCounter <= 0 && canMove)
         {
 
             // Check if the player is within a certain distance
@@ -99,8 +102,9 @@ public class OverworldEnemy : MonoBehaviour
                 }
             }
         }
-        else
+        else if (canMove)
         {
+
             rb.velocity = Kdirection * knockBackForce;
             knockBackCounter -= Time.deltaTime;
             //Debug.Log(Kdirection);
@@ -160,14 +164,24 @@ public class OverworldEnemy : MonoBehaviour
     public void takeDamage(int damage) //, Vector3 jumpBackDirection posible parameter
     {
         health -= damage;
-        //animator.SetTrigger("Damage");
         spriteRenderer.color = Color.red;
         StartCoroutine(ResetColorAfterDelay(0.5f)); // Adjust the duration as needed
         //rb.AddForce(new Vector2(0f, -1f) * pushBackForce, ForceMode2D.Impulse); // Adjust the push back direction as needed (still needs to be adjusted)
-        if (health <= 0)
+        if (health <= 0 && gameObject.CompareTag("Enemy"))
         {
-            gameObject.SetActive(false);
+            
+            canMove = false;
+            rb.velocity = Vector2.zero;
+            gameObject.tag = "Untagged";
+            Debug.Log(gameObject.tag);
+            animator.SetTrigger("Death"); //disabled object called from animation
         }
+    }
+
+    public void disableObject()
+    {
+        Debug.Log("deez");
+        gameObject.SetActive(false);
     }
 
     private IEnumerator ResetColorAfterDelay(float delay)
@@ -175,6 +189,7 @@ public class OverworldEnemy : MonoBehaviour
         yield return new WaitForSeconds(delay);
         spriteRenderer.color = Color.white; // Set it back to the original color
     }
+
 
     private void OnCollisionEnter2D(Collision2D col)
     {
