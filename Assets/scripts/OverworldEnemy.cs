@@ -71,7 +71,6 @@ public class OverworldEnemy : MonoBehaviour
                     lastXDirection = -1;
                 animator.SetFloat("Direction", lastXDirection);
 
-                //Debug.Log(lastXDirection);
                 // Move towards the player
                 rb.velocity = direction * speed;
             }
@@ -105,11 +104,6 @@ public class OverworldEnemy : MonoBehaviour
             knockBackCounter -= Time.deltaTime;
             //Debug.Log(Kdirection);
         }
-    }
-
-    private void FixedUpdate()
-    {
-        
     }
 
     public void decision()
@@ -248,5 +242,4 @@ public class OverworldEnemy : MonoBehaviour
             }
         }
     }
-    
 }
