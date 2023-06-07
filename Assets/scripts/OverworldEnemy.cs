@@ -33,7 +33,8 @@ public class OverworldEnemy : MonoBehaviour
     public float timeBetweenDirectionChanges = 2f;
     private float lastChange = 3f;
 
-    private int lastXDirection = 1;
+    protected float lastXDirection = 1;
+    protected float lastYDirection = 1;
     
 
     void Start()
@@ -51,7 +52,6 @@ public class OverworldEnemy : MonoBehaviour
         randomDirection();
         direction.Normalize();
         currentState = State.Move;
-        
     }
 
 
@@ -61,28 +61,35 @@ public class OverworldEnemy : MonoBehaviour
         if (knockBackCounter <= 0 && canMove)
         {
 
-            // Check if the player is within a certain distance
+            // Player Chase
             if (Vector3.Distance(transform.position, player.transform.position) < 10f)
             {
                 // Calculate the direction to the player
                 animator.SetTrigger("Moving");
                 direction = player.transform.position - transform.position;
                 direction.Normalize();
+                /*
                 if (direction.x > 0)
-                    lastXDirection = 1;
+                    lastXDirection = direction.x;
                 else
-                    lastXDirection = -1;
-                animator.SetFloat("Direction", lastXDirection);
+                    lastXDirection = direction.x;
+                
+                if (direction.y > 0)
+                    lastYDirection = direction.y;
+                else
+                    lastYDirection = direction.y;
+                */
+                lastXDirection = direction.x;
+                lastYDirection = direction.y;
+                animateDirection();
 
-                //Debug.Log(lastXDirection);
                 // Move towards the player
                 rb.velocity = direction * speed;
             }
 
+            // If player is not in range, move randomly
             else
             {
-                // Stop moving if the player is far away
-                //rb.velocity = Vector2.zero;
                 decision();
                 switch (currentState)
                 {
@@ -104,10 +111,8 @@ public class OverworldEnemy : MonoBehaviour
         }
         else if (canMove)
         {
-
             rb.velocity = Kdirection * knockBackForce;
             knockBackCounter -= Time.deltaTime;
-            //Debug.Log(Kdirection);
         }
     }
 
@@ -142,7 +147,7 @@ public class OverworldEnemy : MonoBehaviour
         {
             case 1:
                 direction = new Vector3(0f, 1f, 0f);
-                
+                lastYDirection = 1;
                 break;
             case 2:
                 direction = new Vector3(1f, 0f, 0f);
@@ -150,6 +155,7 @@ public class OverworldEnemy : MonoBehaviour
                 break;
             case 3:
                 direction = new Vector3(0f, -1f, 0f);
+                lastYDirection = -1;
                 break;
             case 4:
                 direction = new Vector3(-1f, 0f, 0f);
@@ -157,7 +163,8 @@ public class OverworldEnemy : MonoBehaviour
                 break;
         }
 
-        animator.SetFloat("Direction", lastXDirection);
+        //animator.SetFloat("XDirection", lastXDirection);
+        animateDirection();
     }
 
 
@@ -233,35 +240,33 @@ public class OverworldEnemy : MonoBehaviour
                 if (dotUp >= angleThreshold)
                 {
                     Kdirection = Vector2.down;
-                    // Trigger enter from the up direction
                     Debug.Log("Trigger enter from up direction.");
                 }
                 else if (dotDown >= angleThreshold)
                 {
                     Kdirection = Vector2.up;
-                    // Trigger enter from the down direction
                     Debug.Log("Trigger enter from down direction.");
                 }
                 else if (dotLeft >= angleThreshold)
                 {
                     Kdirection = Vector2.right;
-                    // Trigger enter from the left direction
                     Debug.Log("Trigger enter from left direction.");
                 }
                 else if (dotRight >= angleThreshold)
                 {
                     Kdirection = Vector2.left;
-
-                    // Trigger enter from the right direction
                     Debug.Log(Kdirection);
                 }
                 else
                 {
-                    // Collision from a non-perfect direction
-                    Debug.Log("Trigger enter from a non-perfect direction.");
+                    //Debug.Log("Trigger enter from a non-perfect direction.");
                 }
             }
         }
     }
     
+    protected virtual void animateDirection()
+    {
+        animator.SetFloat("XDirection", lastXDirection);
+    }
 }
