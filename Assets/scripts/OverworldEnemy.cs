@@ -60,54 +60,7 @@ public class OverworldEnemy : MonoBehaviour
     {
         if (knockBackCounter <= 0 && canMove)
         {
-
-            // Player Chase
-            if (Vector3.Distance(transform.position, player.transform.position) < 10f)
-            {
-                // Calculate the direction to the player
-                animator.SetTrigger("Moving");
-                direction = player.transform.position - transform.position;
-                direction.Normalize();
-                /*
-                if (direction.x > 0)
-                    lastXDirection = direction.x;
-                else
-                    lastXDirection = direction.x;
-                
-                if (direction.y > 0)
-                    lastYDirection = direction.y;
-                else
-                    lastYDirection = direction.y;
-                */
-                lastXDirection = direction.x;
-                lastYDirection = direction.y;
-                animateDirection();
-
-                // Move towards the player
-                rb.velocity = direction * speed;
-            }
-
-            // If player is not in range, move randomly
-            else
-            {
-                decision();
-                switch (currentState)
-                {
-                    case State.Idle:
-                        animator.SetTrigger("Idle");
-                        break;
-                    case State.Move:
-                        animator.SetTrigger("Moving");
-                        if (Time.time - lastChange > timeBetweenDirectionChanges)
-                        {
-                            randomDirection();
-                            direction.Normalize();
-                            lastChange = Time.time;
-                        }
-                        transform.position += direction * speed * Time.deltaTime;
-                        break;
-                }
-            }
+            chase();
         }
         else if (canMove)
         {
@@ -166,6 +119,53 @@ public class OverworldEnemy : MonoBehaviour
         //animator.SetFloat("XDirection", lastXDirection);
         animateDirection();
     }
+
+    public void chase()
+    {
+            rando = Random.Range(1, 2);
+            switch (rando)
+            {
+                case 1:
+                    if (Vector3.Distance(transform.position, player.transform.position) < 10f)
+                    {
+                        // Calculate the direction to the player
+                        animator.SetTrigger("Moving");
+                        direction = player.transform.position - transform.position;
+                        direction.Normalize();
+                        lastXDirection = direction.x;
+                        lastYDirection = direction.y;
+                        animateDirection();
+                        // Move towards the player
+                        rb.velocity = direction * speed;
+                    }
+                    break;
+
+                case 2:
+                // If player is not in range, move randomly
+                decision();
+                    switch (currentState)
+                    {
+                        case State.Idle:
+                            animator.SetTrigger("Idle");
+                            break;
+                        case State.Move:
+                            animator.SetTrigger("Moving");
+                            if (Time.time - lastChange > timeBetweenDirectionChanges)
+                            {
+                                randomDirection();
+                                direction.Normalize();
+                                lastChange = Time.time;
+                            }
+                            transform.position += direction * speed * Time.deltaTime;
+                            break;
+                    }
+                    break;
+            }
+            
+    }
+
+  
+
 
 
     public void takeDamage(int damage) //, Vector3 jumpBackDirection posible parameter
