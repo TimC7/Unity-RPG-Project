@@ -30,30 +30,27 @@ public class BuyItem : MonoBehaviour
         }
     }
 
-
-
  	private IEnumerator CheckInput()
-    		{
-        		while (playerInRange)
-        		{
-            			if (Input.GetButtonDown("Interact"))
-            			{
-                			//Debug.Log("Press Interact.");
-					if (inv.gold >= price)
-					{
-                				inv.takeMoney(price);
-                				inv.AddItem(itemName);
-                				Destroy(gameObject);
-					}
-					else
-					{
-			    			Debug.Log("Not enough money");
-					}
-            			}
-            		yield return null;
-       			}
-    		}
-
+    {
+        while (playerInRange)
+        {
+            	if (Input.GetButtonDown("Interact"))
+            	{
+                	//Debug.Log("Press Interact.");
+			if (inv.gold >= price)
+			{
+                		inv.takeMoney(price);
+                		inv.AddItem(itemName);
+                		Destroy(gameObject);
+			}
+			else
+			{
+			    	Debug.Log("Not enough money");
+			}
+            	}
+            yield return null;
+       	}
+    }
 }
 
 

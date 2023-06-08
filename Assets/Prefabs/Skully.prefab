@@ -120,15 +120,15 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &5308817413063587133
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -173,10 +173,12 @@ MonoBehaviour:
   knockBackCounter: 0
   knockBackTotalTime: 0
   spriteRenderer: {fileID: 0}
-  health: 3
-  maxHealth: 3
-  str: 1
+  health: 5
+  maxHealth: 5
+  str: 2
   player: {fileID: 0}
+  alertRange: 7
+  attackRange: 0.5
   currentState: 0
   Kdirection: {x: 0, y: 0}
   collisionDirection: {x: 0, y: 0}

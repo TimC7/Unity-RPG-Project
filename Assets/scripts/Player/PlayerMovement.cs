@@ -135,7 +135,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             animator.SetTrigger("Attack");
-            //goop.takeDamage(jumpBackDirection);
         }
     }
 
@@ -150,10 +149,9 @@ public class PlayerMovement : MonoBehaviour
             gameObject.GetComponent<PartnerFollow>().enabled = true;
             gameObject.GetComponent<PlayerMovement>().enabled = false;
         }
-
-
     }
     */
+
     public void takeDamage(int damage)
     {
         if (!isInvincible)
@@ -242,7 +240,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void animate()
     {
-        // Animation variable code
         currentVelocity = gameObject.GetComponent<Rigidbody2D>().velocity;
 
         if (moveHorizontal < 0 && currentVelocity.x <= 0)
@@ -271,8 +268,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
-
     public void isAttackingOn()
     {
         //Debug.Log("isAttackingOn()");
@@ -293,10 +288,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("Player collided with something");
+        //Debug.Log("Player collided with something");
         if (col.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Player collided with enemy.");
+            //Debug.Log("Player collided with enemy.");
             contact = col.contacts[0];
             collisionDirection = contact.normal;
             knockBackCounter = knockBackTotalTime;

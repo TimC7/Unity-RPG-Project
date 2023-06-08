@@ -8,7 +8,7 @@ public class OverworldEnemy : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
 
-    public float knockBackForce, knockBackCounter, knockBackTotalTime;// Adjust the force as needed
+    public float knockBackForce, knockBackCounter, knockBackTotalTime;
     public SpriteRenderer spriteRenderer;
 
     public int health = 3;
@@ -16,8 +16,9 @@ public class OverworldEnemy : MonoBehaviour
     public int str = 1;
 
     public GameObject player;
-
-    public enum State { Idle, Move, Chase, Pain, Frozen };
+    public float alertRange = 7f;
+    public float attackRange = .5f;
+    public enum State { Idle, Move, Chase, Attack, Pain, Frozen };
     public State currentState;
 
     public Vector2 Kdirection;
@@ -29,15 +30,15 @@ public class OverworldEnemy : MonoBehaviour
     private int rando;
     public float speed = 1f;
     public float timeBetweenChoices = 2f;
-    private float lastChoice = 3f;
+    protected float lastChoice = 3f;
     public float timeBetweenDirectionChanges = 2f;
-    private float lastChange = 3f;
+    protected float lastChange = 3f;
 
     protected float lastXDirection = 1;
     protected float lastYDirection = 1;
     
 
-    void Start()
+    protected virtual void Start()
     {
         canMove = true;
         rb = GetComponent<Rigidbody2D>();
@@ -54,26 +55,13 @@ public class OverworldEnemy : MonoBehaviour
         currentState = State.Move;
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         stateDecision();
         stateMachine();
-        /*
-        if (knockBackCounter <= 0 && canMove)
-        {
-            chase();
-        }
-        else if (canMove)
-        {
-            rb.velocity = Kdirection * knockBackForce;
-            knockBackCounter -= Time.deltaTime;
-        }
-        */
     }
 
-    public void stateDecision()
+    protected virtual void stateDecision()
     {
         if (canMove)
         {
@@ -81,23 +69,13 @@ public class OverworldEnemy : MonoBehaviour
             {
                 currentState = State.Pain;
             }
-            else if (Vector3.Distance(transform.position, player.transform.position) < 10f)
+            else if (Vector3.Distance(transform.position, player.transform.position) < alertRange)
             {
                 currentState = State.Chase;
             }
             else if (Time.time - lastChoice > timeBetweenChoices)
             {
-                rando = Random.Range(1, 3);
-                switch (rando)
-                {
-                    case 1:
-                        currentState = State.Idle;
-                        break;
-                    case 2:
-                        currentState = State.Move;
-
-                        break;
-                }
+                idleOrMove();
                 lastChoice = Time.time;
             }
         }
@@ -107,7 +85,7 @@ public class OverworldEnemy : MonoBehaviour
         }
     }
 
-    public void stateMachine()
+    protected virtual void stateMachine()
     {
         switch (currentState)
         {
@@ -120,6 +98,9 @@ public class OverworldEnemy : MonoBehaviour
             case State.Chase:
                 chase();
                 break;
+            case State.Attack:
+                attack();
+                break;
             case State.Pain:
                 pain();
                 break;
@@ -129,12 +110,12 @@ public class OverworldEnemy : MonoBehaviour
         }
     }
 
-    public void idle()
+    protected virtual void idle()
     {
         animator.SetTrigger("Idle");
     }
 
-    public void move()
+    protected virtual void move()
     {
         animator.SetTrigger("Moving");
         if (Time.time - lastChange > timeBetweenDirectionChanges)
@@ -146,31 +127,51 @@ public class OverworldEnemy : MonoBehaviour
         transform.position += direction * speed * Time.deltaTime;
     }
 
-    public void chase()
+    protected virtual void chase()
     {
-        // Calculate the direction to the player
         animator.SetTrigger("Moving");
+
         direction = player.transform.position - transform.position;
         direction.Normalize();
+
         lastXDirection = direction.x;
         lastYDirection = direction.y;
         animateDirection();
-        // Move towards the player
+
         rb.velocity = direction * speed;
     }
 
-    public void pain()
+    protected virtual void attack()
+    {
+        Debug.Log(gameObject + " is attacking.");
+    }
+
+    protected virtual void pain()
     {
         rb.velocity = Kdirection * knockBackForce;
         knockBackCounter -= Time.deltaTime;
     }
 
-    public void frozen()
+    protected virtual void frozen()
     {
         rb.velocity = Vector2.zero;
     }
 
-    public void takeDamage(int damage) 
+    protected void idleOrMove()
+    {
+        rando = Random.Range(1, 3);
+        switch (rando)
+        {
+            case 1:
+                currentState = State.Idle;
+                break;
+            case 2:
+                currentState = State.Move;
+                break;
+        }
+    }
+
+    public virtual void takeDamage(int damage) 
     {
         health -= damage;
         spriteRenderer.color = Color.red;
@@ -180,7 +181,6 @@ public class OverworldEnemy : MonoBehaviour
             canMove = false;
             rb.velocity = Vector2.zero;
             gameObject.tag = "Untagged";
-            //Debug.Log(gameObject.tag);
             animator.SetTrigger("Death"); //disabled object called from animation
         }
     }
@@ -211,14 +211,30 @@ public class OverworldEnemy : MonoBehaviour
 
     public void disableObject()
     {
-        //Debug.Log("deez");
         gameObject.SetActive(false);
+    }
+
+    protected virtual void animateDirection()
+    {
+        animator.SetFloat("XDirection", lastXDirection);
     }
 
     private IEnumerator ResetColorAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         spriteRenderer.color = Color.white; // Set it back to the original color
+    }
+
+    public void canMoveTrue()
+    {
+        Debug.Log("canMove = true.");
+        canMove = true;
+    }
+
+    public void canMoveFalse()
+    {
+        Debug.Log("canMove = false");
+        canMove = false;
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -231,64 +247,53 @@ public class OverworldEnemy : MonoBehaviour
         {
         }
     }
+
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Player Attack"))
         {
-            if (col.gameObject.CompareTag("Player Attack"))
-            {
+            //Debug.Log("I got attacked!");
+            takeDamage(player.GetComponent<PlayerMovement>().str);
 
-                //Debug.Log("I got attacked!");
-                takeDamage(player.GetComponent<PlayerMovement>().str);
-
-                // Get the direction from this object to the other object
-                Vector2 collisionDirection = col.transform.position - transform.position;
+            Vector2 collisionDirection = col.transform.position - transform.position;
                 
+            collisionDirection.Normalize();
 
-                // Normalize the direction vector if needed
-                collisionDirection.Normalize();
+            knockBackCounter = knockBackTotalTime;
 
-                knockBackCounter = knockBackTotalTime;
+            float dotUp = Vector2.Dot(collisionDirection, Vector2.up);
+            float dotDown = Vector2.Dot(collisionDirection, Vector2.down);
+            float dotLeft = Vector2.Dot(collisionDirection, Vector2.left);
+            float dotRight = Vector2.Dot(collisionDirection, Vector2.right);
 
-                float dotUp = Vector2.Dot(collisionDirection, Vector2.up);
-                float dotDown = Vector2.Dot(collisionDirection, Vector2.down);
-                float dotLeft = Vector2.Dot(collisionDirection, Vector2.left);
-                float dotRight = Vector2.Dot(collisionDirection, Vector2.right);
+            // Set a threshold to determine the collision direction
+            float angleThreshold = 0.5f; // Adjust this value based on your requirements
 
-                // Set a threshold to determine the collision direction
-                float angleThreshold = 0.5f; // Adjust this value based on your requirements
-
-                // Check the dot products against the threshold to determine the collision direction
-                if (dotUp >= angleThreshold)
-                {
-                    Kdirection = Vector2.down;
-                    //Debug.Log("Trigger enter from up direction.");
-                }
-                else if (dotDown >= angleThreshold)
-                {
-                    Kdirection = Vector2.up;
-                    //Debug.Log("Trigger enter from down direction.");
-                }
-                else if (dotLeft >= angleThreshold)
-                {
-                    Kdirection = Vector2.right;
-                    //Debug.Log("Trigger enter from left direction.");
-                }
-                else if (dotRight >= angleThreshold)
-                {
-                    Kdirection = Vector2.left;
-                    //Debug.Log(Kdirection);
-                }
-                else
-                {
-                    //Debug.Log("Trigger enter from a non-perfect direction.");
-                }
+            // Check the dot products against the threshold to determine the collision direction
+            if (dotUp >= angleThreshold)
+            {
+                Kdirection = Vector2.down;
+                //Debug.Log("Trigger enter from up direction.");
+            }
+            else if (dotDown >= angleThreshold)
+            {
+                Kdirection = Vector2.up;
+                //Debug.Log("Trigger enter from down direction.");
+            }
+            else if (dotLeft >= angleThreshold)
+            {
+                Kdirection = Vector2.right;
+                //Debug.Log("Trigger enter from left direction.");
+            }
+            else if (dotRight >= angleThreshold)
+            {
+                Kdirection = Vector2.left;
+                //Debug.Log(Kdirection);
+            }
+            else
+            {
+                //Debug.Log("Trigger enter from a non-perfect direction.");
             }
         }
-    }
-    
-    protected virtual void animateDirection()
-    {
-        animator.SetFloat("XDirection", lastXDirection);
     }
 }
