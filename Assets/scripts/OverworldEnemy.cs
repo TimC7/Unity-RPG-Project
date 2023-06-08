@@ -17,7 +17,7 @@ public class OverworldEnemy : MonoBehaviour
 
     public GameObject player;
 
-    public enum State { Idle, Move };
+    public enum State { Idle, Move, Chase, Pain, Frozen };
     public State currentState;
 
     public Vector2 Kdirection;
@@ -58,6 +58,9 @@ public class OverworldEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        stateDecision();
+        stateMachine();
+        /*
         if (knockBackCounter <= 0 && canMove)
         {
             chase();
@@ -67,32 +70,120 @@ public class OverworldEnemy : MonoBehaviour
             rb.velocity = Kdirection * knockBackForce;
             knockBackCounter -= Time.deltaTime;
         }
+        */
     }
 
-    private void FixedUpdate()
+    public void stateDecision()
     {
-        
-    }
-
-    public void decision()
-    {
-        if (Time.time - lastChoice > timeBetweenChoices)
+        if (canMove)
         {
-            rando = Random.Range(1, 3);
-            switch (rando)
+            if (knockBackCounter > 0)
             {
-                case 1:
-                    currentState = State.Idle;
-                    break;
-                case 2:
-                    currentState = State.Move;
-                    
-                    break;
+                currentState = State.Pain;
             }
-            lastChoice = Time.time;
+            else if (Vector3.Distance(transform.position, player.transform.position) < 10f)
+            {
+                currentState = State.Chase;
+            }
+            else if (Time.time - lastChoice > timeBetweenChoices)
+            {
+                rando = Random.Range(1, 3);
+                switch (rando)
+                {
+                    case 1:
+                        currentState = State.Idle;
+                        break;
+                    case 2:
+                        currentState = State.Move;
+
+                        break;
+                }
+                lastChoice = Time.time;
+            }
+        }
+        else
+        {
+            currentState = State.Frozen;
         }
     }
 
+    public void stateMachine()
+    {
+        switch (currentState)
+        {
+            case State.Idle:
+                idle();
+                break;
+            case State.Move:
+                move();
+                break;
+            case State.Chase:
+                chase();
+                break;
+            case State.Pain:
+                pain();
+                break;
+            case State.Frozen:
+                frozen();
+                break;
+        }
+    }
+
+    public void idle()
+    {
+        animator.SetTrigger("Idle");
+    }
+
+    public void move()
+    {
+        animator.SetTrigger("Moving");
+        if (Time.time - lastChange > timeBetweenDirectionChanges)
+        {
+            randomDirection();
+            direction.Normalize();
+            lastChange = Time.time;
+        }
+        transform.position += direction * speed * Time.deltaTime;
+    }
+
+    public void chase()
+    {
+        // Calculate the direction to the player
+        animator.SetTrigger("Moving");
+        direction = player.transform.position - transform.position;
+        direction.Normalize();
+        lastXDirection = direction.x;
+        lastYDirection = direction.y;
+        animateDirection();
+        // Move towards the player
+        rb.velocity = direction * speed;
+    }
+
+    public void pain()
+    {
+        rb.velocity = Kdirection * knockBackForce;
+        knockBackCounter -= Time.deltaTime;
+    }
+
+    public void frozen()
+    {
+        rb.velocity = Vector2.zero;
+    }
+
+    public void takeDamage(int damage) 
+    {
+        health -= damage;
+        spriteRenderer.color = Color.red;
+        StartCoroutine(ResetColorAfterDelay(0.5f));
+        if (health <= 0 && gameObject.CompareTag("Enemy"))
+        {
+            canMove = false;
+            rb.velocity = Vector2.zero;
+            gameObject.tag = "Untagged";
+            //Debug.Log(gameObject.tag);
+            animator.SetTrigger("Death"); //disabled object called from animation
+        }
+    }
     public void randomDirection()
     {
         rando = Random.Range(1, 5);
@@ -115,79 +206,12 @@ public class OverworldEnemy : MonoBehaviour
                 lastXDirection = -1;
                 break;
         }
-
-        //animator.SetFloat("XDirection", lastXDirection);
         animateDirection();
-    }
-
-    public void chase()
-    {
-            rando = Random.Range(1, 2);
-            switch (rando)
-            {
-                case 1:
-                    if (Vector3.Distance(transform.position, player.transform.position) < 10f)
-                    {
-                        // Calculate the direction to the player
-                        animator.SetTrigger("Moving");
-                        direction = player.transform.position - transform.position;
-                        direction.Normalize();
-                        lastXDirection = direction.x;
-                        lastYDirection = direction.y;
-                        animateDirection();
-                        // Move towards the player
-                        rb.velocity = direction * speed;
-                    }
-                    break;
-
-                case 2:
-                // If player is not in range, move randomly
-                decision();
-                    switch (currentState)
-                    {
-                        case State.Idle:
-                            animator.SetTrigger("Idle");
-                            break;
-                        case State.Move:
-                            animator.SetTrigger("Moving");
-                            if (Time.time - lastChange > timeBetweenDirectionChanges)
-                            {
-                                randomDirection();
-                                direction.Normalize();
-                                lastChange = Time.time;
-                            }
-                            transform.position += direction * speed * Time.deltaTime;
-                            break;
-                    }
-                    break;
-            }
-            
-    }
-
-  
-
-
-
-    public void takeDamage(int damage) //, Vector3 jumpBackDirection posible parameter
-    {
-        health -= damage;
-        spriteRenderer.color = Color.red;
-        StartCoroutine(ResetColorAfterDelay(0.5f)); // Adjust the duration as needed
-        //rb.AddForce(new Vector2(0f, -1f) * pushBackForce, ForceMode2D.Impulse); // Adjust the push back direction as needed (still needs to be adjusted)
-        if (health <= 0 && gameObject.CompareTag("Enemy"))
-        {
-            
-            canMove = false;
-            rb.velocity = Vector2.zero;
-            gameObject.tag = "Untagged";
-            Debug.Log(gameObject.tag);
-            animator.SetTrigger("Death"); //disabled object called from animation
-        }
     }
 
     public void disableObject()
     {
-        Debug.Log("deez");
+        //Debug.Log("deez");
         gameObject.SetActive(false);
     }
 
@@ -197,7 +221,6 @@ public class OverworldEnemy : MonoBehaviour
         spriteRenderer.color = Color.white; // Set it back to the original color
     }
 
-
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Wall"))
@@ -206,7 +229,6 @@ public class OverworldEnemy : MonoBehaviour
         }
         if (col.gameObject.CompareTag("Player"))
         {
-            Debug.Log("This frikkn guy");
         }
     }
     private void OnTriggerEnter2D(Collider2D col)
@@ -216,7 +238,7 @@ public class OverworldEnemy : MonoBehaviour
             if (col.gameObject.CompareTag("Player Attack"))
             {
 
-                Debug.Log("I got attacked!");
+                //Debug.Log("I got attacked!");
                 takeDamage(player.GetComponent<PlayerMovement>().str);
 
                 // Get the direction from this object to the other object
@@ -240,22 +262,22 @@ public class OverworldEnemy : MonoBehaviour
                 if (dotUp >= angleThreshold)
                 {
                     Kdirection = Vector2.down;
-                    Debug.Log("Trigger enter from up direction.");
+                    //Debug.Log("Trigger enter from up direction.");
                 }
                 else if (dotDown >= angleThreshold)
                 {
                     Kdirection = Vector2.up;
-                    Debug.Log("Trigger enter from down direction.");
+                    //Debug.Log("Trigger enter from down direction.");
                 }
                 else if (dotLeft >= angleThreshold)
                 {
                     Kdirection = Vector2.right;
-                    Debug.Log("Trigger enter from left direction.");
+                    //Debug.Log("Trigger enter from left direction.");
                 }
                 else if (dotRight >= angleThreshold)
                 {
                     Kdirection = Vector2.left;
-                    Debug.Log(Kdirection);
+                    //Debug.Log(Kdirection);
                 }
                 else
                 {
