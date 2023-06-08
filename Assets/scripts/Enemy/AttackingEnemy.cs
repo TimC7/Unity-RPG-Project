@@ -9,7 +9,7 @@ public class AttackingEnemy : OverworldEnemy
     {
         health = 5;
         str = 2;
-        attackRange = 2f;
+        //attackRange = 2f;
         isAttacking = false;
         base.Start();
     }
@@ -19,7 +19,6 @@ public class AttackingEnemy : OverworldEnemy
         //Debug.Log("canMove = " + canMove);
         if (canMove)
         {
-            //Debug.Log("canMove in if = " + canMove);
             if (knockBackCounter > 0)
             {
                 currentState = State.Pain;
@@ -39,6 +38,10 @@ public class AttackingEnemy : OverworldEnemy
                 idleOrMove();
                 lastChoice = Time.time;
             }
+        }
+        else if (knockBackCounter > 0) // Could move this to beginning
+        {
+            currentState = State.Pain;
         }
         else
         {

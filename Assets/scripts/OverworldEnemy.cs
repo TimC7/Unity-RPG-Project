@@ -227,13 +227,11 @@ public class OverworldEnemy : MonoBehaviour
 
     public void canMoveTrue()
     {
-        Debug.Log("canMove = true.");
         canMove = true;
     }
 
     public void canMoveFalse()
     {
-        Debug.Log("canMove = false");
         canMove = false;
     }
 
