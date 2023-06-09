@@ -244,12 +244,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void setLevelDisplay()
     {
-        levelDisplay.text = "Level: " + level.ToString();
+        levelDisplay.text = level.ToString();
     }
 
     public void setStrengthDisplay()
     {
-        strengthDisplay.text = "Strength: " + str.ToString();
+        strengthDisplay.text = str.ToString();
     }
 
     public void animate()
