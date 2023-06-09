@@ -7,8 +7,8 @@ public class GameData
 {
     //public List<string> inventory;
     public int partyGold, currentFloor;
-    public int maxLevel, maxExp, maxMaxHealth, maxCurrentHealth, maxStr,
-               luciaLevel, luciaExp, luciaMaxHealth, luciaCurrentHealth, luciaStr;
+    public int maxLevel, maxExp, maxMaxHealth, maxCurrentHealth, maxStr;
+               //luciaLevel, luciaExp, luciaMaxHealth, luciaCurrentHealth, luciaStr;
     
     public GameData()
     {

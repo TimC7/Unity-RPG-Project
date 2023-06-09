@@ -14,6 +14,7 @@ public class OverworldEnemy : MonoBehaviour
     public int health = 3;
     public int maxHealth = 3;
     public int str = 1;
+    public int expReward = 10;
 
     public GameObject player;
     public float alertRange = 7f;
@@ -180,6 +181,7 @@ public class OverworldEnemy : MonoBehaviour
         {
             canMove = false;
             rb.velocity = Vector2.zero;
+            player.GetComponent<PlayerMovement>().addExp(expReward);
             gameObject.tag = "Untagged";
             animator.SetTrigger("Death"); //disabled object called from animation
         }

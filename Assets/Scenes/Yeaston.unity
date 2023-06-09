@@ -10014,6 +10014,14 @@ PrefabInstance:
       propertyPath: hideInSceneView
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4039542523867386427, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4039542523867386427, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 399874841
+      objectReference: {fileID: 0}
     - target: {fileID: 8315717754431830148, guid: d65836327c65c4c49a23a74eeea1b300, type: 3}
       propertyPath: m_IsActive
       value: 0

@@ -129,7 +129,7 @@ MonoBehaviour:
   partner: {fileID: 8234421604011645851, guid: bdc3e73876862a64ea09885c59c08590, type: 3}
   mainCamera: {fileID: 6166040262715697210, guid: baf195085d7c8234f81a111cf127b2f6, type: 3}
   sr: {fileID: 0}
-  isBattle: 0
+  gm: {fileID: 0}
   isAttacking: 0
   hitBoxSize: {x: 0.5, y: 0.5}
   hitBoxLocation: {x: 0, y: 0}
@@ -137,13 +137,14 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 3
   str: 1
-  healthBar: {fileID: 0}
   exp: 0
-  expThreshold: 100
-  healthIncrease: 5
+  expIncrement: 30
+  healthIncrease: 1
+  strIncrease: 1
   gold: 0
-  Level: {fileID: 0}
-  Strength: {fileID: 0}
+  healthBar: {fileID: 0}
+  levelDisplay: {fileID: 0}
+  strengthDisplay: {fileID: 0}
   knockBackForce: 10
   knockBackCounter: 0
   knockBackTotalTime: 0

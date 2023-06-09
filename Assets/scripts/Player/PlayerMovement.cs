@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
    // public OverworldEnemy goop;
    // public Vector3 jumpBackDirection = new Vector3(-1f, 0f, 0f);
 
-    public bool isBattle = false;
+    //public bool isBattle = false;
     public bool isAttacking = false;
     private Collider2D hitBox;
     public Vector2 hitBoxSize = new Vector3(.5f, .5f), hitBoxLocation;
@@ -36,9 +36,10 @@ public class PlayerMovement : MonoBehaviour
     
 
     public int exp;
-    public int expThreshold = 100;
-    public int healthIncrease = 5;
-    //public int strIncrease = 1;
+    private int expThreshold;
+    public int expIncrement = 30;
+    public int healthIncrease = 1;
+    public int strIncrease = 1;
 
     public int gold;
 
@@ -83,8 +84,8 @@ public class PlayerMovement : MonoBehaviour
         invincibilityDuration = .2f;
         knockBackForce = 10;
         knockBackTotalTime = .1f;
-        setLevel();
-        setStrength();
+        setLevelDisplay();
+        setStrengthDisplay();
     }
 
     private void OnEnable()
@@ -202,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
     public void addExp(int expGains)
     {
         exp += expGains;
-
+        expThreshold = level * expIncrement; // Hardcoded increment each level
         if (exp >= expThreshold)
         {
             levelUp();
@@ -212,28 +213,41 @@ public class PlayerMovement : MonoBehaviour
     public void levelUp()
     {
         level += 1;
-        maxHealth += healthIncrease; // increase only hp, str gets increased from guy
-        // str += strIncrease;
+        // Alternate between health and strength
+        if (level % 2 == 0)
+        {
+            strUp(strIncrease);
+        }
+        else
+        {
+            healthUp(healthIncrease);
+        }
 
         // Get leftover exp to keep towards next level up
         exp -= expThreshold;
 
-        setLevel();
+        setLevelDisplay();
     }
 
     public void strUp(int amount)
     {
         str += amount;
-        setStrength();
+        setStrengthDisplay();
     }
 
-    public void setLevel()
+    public void healthUp(int amount)
+    {
+        maxHealth += amount;
+        currentHealth += amount;
+        healthBar.SetHealth(currentHealth);
+    }
+
+    public void setLevelDisplay()
     {
         levelDisplay.text = "Level: " + level.ToString();
-
     }
 
-    public void setStrength()
+    public void setStrengthDisplay()
     {
         strengthDisplay.text = "Strength: " + str.ToString();
     }

@@ -76,20 +76,6 @@ public class Inventory : MonoBehaviour
 
     public void setGoldAmount()
     {
-        goldAmount.text = "Gold: " + gold.ToString();
+        goldAmount.text = gold.ToString();
     }
 }
-
-
-
-/*
-public class ItemSlot
-{
-	[SerializeField] ItemBase item;
-	[SerializeField] int count;
-
-	public ItemBase Item => item;
-
-	public int Count => count;
-}
-*/
