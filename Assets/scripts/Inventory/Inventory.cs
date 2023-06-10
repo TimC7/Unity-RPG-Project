@@ -15,6 +15,10 @@ public class Inventory : MonoBehaviour
     public string water = "Water";
     public string yeast = "Yeast";
 
+    public string speedUpgrade = "Blue Charm";
+    public string projectileUpgrade = "Fireball";
+    public string InvincibilityUpgrade = "Pocket Dimension";
+
     public TextMeshProUGUI goldAmount;
 
     private void Start()
@@ -57,7 +61,6 @@ public class Inventory : MonoBehaviour
 
     public void useItem(string itemName, GameObject itemUser)
     {  
-        //itemUser.getComponent<script with active health>().healByAmount(10);
         if (itemName == milk)
         {
             itemUser.GetComponent<PlayerMovement>().healByAmount(10);

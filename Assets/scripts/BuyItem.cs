@@ -5,7 +5,6 @@ using UnityEngine;
 public class BuyItem : MonoBehaviour
 {
     public Inventory inv;
-    //public ItemBase type;
     public string itemName;
     public int price;
 
@@ -14,6 +13,7 @@ public class BuyItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
         if (collision.CompareTag("Player"))
         {
             playerInRange = true;
@@ -34,20 +34,19 @@ public class BuyItem : MonoBehaviour
     {
         while (playerInRange)
         {
-            	if (Input.GetButtonDown("Interact"))
-            	{
-                	//Debug.Log("Press Interact.");
-			if (inv.gold >= price)
-			{
-                		inv.takeMoney(price);
-                		inv.AddItem(itemName);
-                		Destroy(gameObject);
-			}
-			else
-			{
-			    	Debug.Log("Not enough money");
-			}
-            	}
+            if (Input.GetButtonDown("Interact"))
+            {
+			    if (inv.gold >= price)
+			    {
+                		    inv.takeMoney(price);
+                		    inv.AddItem(itemName);
+                		    Destroy(gameObject);
+			    }
+			    else
+			    {
+			    	    Debug.Log("Not enough money");
+			    }
+            }
             yield return null;
        	}
     }

@@ -21,27 +21,22 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     GameManager gm;
 
-   // public OverworldEnemy goop;
-   // public Vector3 jumpBackDirection = new Vector3(-1f, 0f, 0f);
-
-    //public bool isBattle = false;
+    public bool canFireProjectile = false, canTurnInvincible = false;
     public bool isAttacking = false;
-    private Collider2D hitBox;
-    public Vector2 hitBoxSize = new Vector3(.5f, .5f), hitBoxLocation;
+    //private Collider2D hitBox;
+    //public Vector2 hitBoxSize = new Vector3(.5f, .5f), hitBoxLocation;
 
+    public Inventory inv;
     public int level = 1;
     public int currentHealth = 3;
     public int maxHealth = 3;
     public int str = 1;
     
-
     public int exp;
     private int expThreshold;
     public int expIncrement = 30;
     public int healthIncrease = 1;
     public int strIncrease = 1;
-
-    public int gold;
 
     public HealthBar healthBar;
     public TextMeshProUGUI levelDisplay;
@@ -50,24 +45,22 @@ public class PlayerMovement : MonoBehaviour
     private float moveHorizontal, moveVertical;
     Vector2 currentVelocity;
 
-    //private int currentTurn = 0;
-
-    float invincibilityDuration = 1.0f;
-    bool isInvincible = false;
+    public float invincibilityDuration = 1.0f;
+    public bool isInvincible = false;
     Color spriteColor;
 
     ContactPoint2D contact;
     Vector3 collisionDirection;
     public float knockBackForce = 10, knockBackCounter, knockBackTotalTime;
     
-
     private void Start()
     { 
 
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        // Probably need to change these for scene transitions
+        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+
         currentHealth = maxHealth;
 
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
@@ -86,6 +79,8 @@ public class PlayerMovement : MonoBehaviour
         knockBackTotalTime = .1f;
         setLevelDisplay();
         setStrengthDisplay();
+
+        initializeItemEffects();
     }
 
     private void OnEnable()
@@ -108,6 +103,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         attack();
+        if (canFireProjectile)
+        {
+            projectileAttack();
+        }
+        if (canTurnInvincible)
+        {
+            tempInvincibility();
+        }
         //switchControl();
         animate();
     }
@@ -117,7 +120,6 @@ public class PlayerMovement : MonoBehaviour
         if (!isAttacking && knockBackCounter <= 0)
         {
             rb.velocity = new Vector2(moveHorizontal * speed, moveVertical * speed);
-            //Debug.Log(rb.velocity);
         }
         else if (isAttacking)
         {
@@ -136,6 +138,23 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             animator.SetTrigger("Attack");
+        }
+    }
+
+    public void projectileAttack()
+    {
+        if (Input.GetButtonDown("Fire2"))
+        {
+            animator.SetTrigger("Attack");
+            // yield to match with animation? then spawn projectile
+        }
+    }
+
+    public void tempInvincibility()
+    {
+        if (Input.GetButtonDown("Jump")) // Space
+        {
+            StartCoroutine(invincibilityTimer());
         }
     }
 
@@ -284,13 +303,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void isAttackingOn()
     {
-        //Debug.Log("isAttackingOn()");
         isAttacking = true;
     }
 
     public void isAttackingOff()
     {
-        //Debug.Log("isAttackingOff()");
         isAttacking = false;
     }
 
@@ -298,6 +315,22 @@ public class PlayerMovement : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetHealth(currentHealth);
+    }
+
+    public void initializeItemEffects()
+    {
+        if (inv.inventory.Contains(inv.speedUpgrade))
+        {
+            speed *= .5f;
+        }
+        if (inv.inventory.Contains(inv.projectileUpgrade))
+        {
+            canFireProjectile = true;
+        }
+        if (inv.inventory.Contains(inv.InvincibilityUpgrade))
+        {
+            canTurnInvincible = true;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D col)
