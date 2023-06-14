@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Projectile : MonoBehaviour
+{
+    private Rigidbody2D rb;
+    public int damage = 2;
+    public float speed = 3f, destroyDelay = 10f;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.velocity = -transform.up * speed;
+        Destroy(gameObject, destroyDelay);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            collision.SendMessage("takeDamage", damage);
+        }
+        if (!collision.CompareTag("Player Attack") && !collision.CompareTag("Player"))
+        {
+            Debug.Log(collision.tag);
+            Destroy(this.gameObject);
+        }
+    }
+}

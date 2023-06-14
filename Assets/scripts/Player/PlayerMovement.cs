@@ -22,6 +22,12 @@ public class PlayerMovement : MonoBehaviour
     GameManager gm;
 
     public bool canFireProjectile = false, canTurnInvincible = false;
+    public bool isFiringProjectile = false;
+    public GameObject projectile;
+    public GameObject playerHitbox;
+    public int direction; // for projectile
+    Quaternion rotation = Quaternion.Euler(0, 0, 0);
+    Vector3 offset = Vector3.zero;
     public bool isAttacking = false;
     //private Collider2D hitBox;
     //public Vector2 hitBoxSize = new Vector3(.5f, .5f), hitBoxLocation;
@@ -61,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
 
+        //playerHitbox = GameObject.Find("Player Attack");
+
         currentHealth = maxHealth;
 
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
@@ -79,8 +87,9 @@ public class PlayerMovement : MonoBehaviour
         knockBackTotalTime = .1f;
         setLevelDisplay();
         setStrengthDisplay();
-
-        initializeItemEffects();
+        
+        Invoke("initializeItemEffects", .5f);
+        //initializeItemEffects();
     }
 
     private void OnEnable()
@@ -90,7 +99,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        
         if (!isAttacking)
         {
             moveHorizontal = Input.GetAxisRaw("Horizontal");
@@ -145,8 +153,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire2"))
         {
+            isFiringProjectile = true;
             animator.SetTrigger("Attack");
-            // yield to match with animation? then spawn projectile
         }
     }
 
@@ -277,22 +285,27 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveHorizontal < 0 && currentVelocity.x <= 0)
         {
+            direction = 4;
             animator.SetInteger("DirectionX", -1);
         }
         else if (moveHorizontal > 0 && currentVelocity.x >= 0)
         {
+            direction = 2;
             animator.SetInteger("DirectionX", 1);
         }
         else
         {
             animator.SetInteger("DirectionX", 0);
         }
+
         if (moveVertical < 0 && currentVelocity.y <= 0)
         {
+            direction = 3;
             animator.SetInteger("DirectionY", -1);
         }
         else if (moveVertical > 0 && currentVelocity.y >= 0)
         {
+            direction = 1;
             animator.SetInteger("DirectionY", 1);
         }
         else
@@ -317,8 +330,45 @@ public class PlayerMovement : MonoBehaviour
         healthBar.SetHealth(currentHealth);
     }
 
+    public void fireProjectile()
+    {
+        switch (direction)
+        {
+            case 1:
+                offset = new Vector3(.1f, 0f, 0f);
+                rotation = Quaternion.Euler(0, 0, 180);
+                break;
+            case 2:
+                offset = new Vector3(0f, -.1f, 0f);
+                rotation = Quaternion.Euler(0, 0, 90);
+                break;
+            case 3:
+                offset = new Vector3(-.1f, 0f, 0f);
+                rotation = Quaternion.Euler(0, 0, 0);
+                break;
+            case 4:
+                offset = new Vector3(0f, -.1f, 0f);
+                rotation = Quaternion.Euler(0, 0, -90);
+                break;
+        }
+        Debug.Log("fireProjectile called.");
+        if (isFiringProjectile)
+        {
+            Debug.Log("isFiringProjectile");
+            Instantiate(projectile, (playerHitbox.transform.position + offset), rotation);
+        }
+        isFiringProjectile = false;
+    }
+
     public void initializeItemEffects()
     {
+        Debug.Log("Initializing inventory item effects...");
+        Debug.Log("Inventory has: ");
+        for (int i = 0; i < inv.inventory.Count; i++)
+        {
+            Debug.Log(inv.inventory[i]);
+        }
+        Debug.Log("What inventory needs for projectile attack: " + inv.projectileUpgrade);
         if (inv.inventory.Contains(inv.speedUpgrade))
         {
             speed *= .5f;
@@ -326,6 +376,7 @@ public class PlayerMovement : MonoBehaviour
         if (inv.inventory.Contains(inv.projectileUpgrade))
         {
             canFireProjectile = true;
+            Debug.Log("Can fire projectiles: " + canFireProjectile);
         }
         if (inv.inventory.Contains(inv.InvincibilityUpgrade))
         {
@@ -362,4 +413,6 @@ public class PlayerMovement : MonoBehaviour
         Coin.SetActive(false);
         // Add coins to the player's inventory or increase the score
     }
+
+
 }

@@ -130,9 +130,13 @@ MonoBehaviour:
   mainCamera: {fileID: 6166040262715697210, guid: baf195085d7c8234f81a111cf127b2f6, type: 3}
   sr: {fileID: 0}
   gm: {fileID: 0}
+  canFireProjectile: 0
+  canTurnInvincible: 0
+  isFiringProjectile: 0
+  projectile: {fileID: 8315619156554386807, guid: ad22623f0f0d37145bab72c07659a3c5, type: 3}
+  playerHitbox: {fileID: 6305203748998903631}
   isAttacking: 0
-  hitBoxSize: {x: 0.5, y: 0.5}
-  hitBoxLocation: {x: 0, y: 0}
+  inv: {fileID: 0}
   level: 1
   currentHealth: 0
   maxHealth: 3
@@ -141,10 +145,11 @@ MonoBehaviour:
   expIncrement: 30
   healthIncrease: 1
   strIncrease: 1
-  gold: 0
   healthBar: {fileID: 0}
   levelDisplay: {fileID: 0}
   strengthDisplay: {fileID: 0}
+  invincibilityDuration: 1
+  isInvincible: 0
   knockBackForce: 10
   knockBackCounter: 0
   knockBackTotalTime: 0
@@ -238,7 +243,7 @@ Transform:
   m_GameObject: {fileID: 6305203748998903631}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 335627278848396152}
