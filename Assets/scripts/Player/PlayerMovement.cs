@@ -349,5 +349,17 @@ public class PlayerMovement : MonoBehaviour
             else
             { Debug.Log("Enemy does not have OverworldEnemy script"); }
         }
+
+        if (col.gameObject.CompareTag("Coin"))
+        {
+            CollectCoin(col.gameObject);
+        }
+    }
+
+    private void CollectCoin(GameObject Coin)
+    {
+        // Disable the coin GameObject or remove it from the scene
+        Coin.SetActive(false);
+        // Add coins to the player's inventory or increase the score
     }
 }

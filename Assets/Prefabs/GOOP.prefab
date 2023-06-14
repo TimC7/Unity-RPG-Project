@@ -149,11 +149,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   animator: {fileID: 0}
+  knockBackForce: 0
+  knockBackCounter: 0
+  knockBackTotalTime: 0
+  spriteRenderer: {fileID: 0}
   health: 3
   maxHealth: 3
   str: 1
+  expReward: 10
+  Coin: {fileID: 5402608989614370249, guid: d0c25b007860c2740a0da2af9a41dcac, type: 3}
   player: {fileID: 0}
+  alertRange: 7
+  attackRange: 0.5
   currentState: 0
+  Kdirection: {x: 0, y: 0}
+  collisionDirection: {x: 0, y: 0}
+  canMove: 1
   direction: {x: 0, y: 0, z: 0}
   speed: 1
   timeBetweenChoices: 2

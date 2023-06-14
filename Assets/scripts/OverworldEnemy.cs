@@ -16,6 +16,8 @@ public class OverworldEnemy : MonoBehaviour
     public int str = 1;
     public int expReward = 10;
 
+    public GameObject Coin;
+
     public GameObject player;
     public float alertRange = 7f;
     public float attackRange = .5f;
@@ -181,6 +183,7 @@ public class OverworldEnemy : MonoBehaviour
         {
             canMove = false;
             rb.velocity = Vector2.zero;
+            Instantiate(Coin, transform.position, Quaternion.identity);
             player.GetComponent<PlayerMovement>().addExp(expReward);
             gameObject.tag = "Untagged";
             animator.SetTrigger("Death"); //disabled object called from animation
