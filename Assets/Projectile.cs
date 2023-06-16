@@ -5,12 +5,15 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private PlayerMovement player;
     public int damage = 2;
     public float speed = 3f, destroyDelay = 10f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        damage = player.str + 2; // arbitrary increase of 2
         rb.velocity = -transform.up * speed;
         Destroy(gameObject, destroyDelay);
     }

@@ -34,8 +34,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Inventory inv;
     public int level = 1;
-    public int currentHealth = 3;
-    public int maxHealth = 3;
+    public int currentHealth = 3, currentMagic;
+    public int maxHealth = 3, maxMagic;
     public int str = 1;
     
     public int exp;
@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     public int strIncrease = 1;
 
     public HealthBar healthBar;
+    public MagicBar magicBar;
     public TextMeshProUGUI levelDisplay;
     public TextMeshProUGUI strengthDisplay;
 
@@ -70,26 +71,36 @@ public class PlayerMovement : MonoBehaviour
         //playerHitbox = GameObject.Find("Player Attack");
 
         currentHealth = maxHealth;
+        maxMagic = maxHealth; // Magic will be same value as health
+        currentMagic = maxMagic;
 
         healthBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
+        magicBar = GameObject.Find("Magic Bar").GetComponent<MagicBar>();
         levelDisplay = GameObject.Find("Level Display").GetComponent<TextMeshProUGUI>();
         strengthDisplay = GameObject.Find("Strength Display").GetComponent<TextMeshProUGUI>();
 
         healthBar.SetHealth(currentHealth);
+        magicBar.SetMagic(currentMagic);
 
         if (healthBar != null)
         {
             healthBar.SetMaxHealth(maxHealth);
         }
         else Debug.Log("healthBar not found.");
+        if (magicBar != null)
+        {
+            magicBar.SetMaxMagic(maxMagic);
+        }
+        else Debug.Log("magicBar not found.");
+
         invincibilityDuration = .2f;
         knockBackForce = 10;
         knockBackTotalTime = .1f;
         setLevelDisplay();
         setStrengthDisplay();
         
-        Invoke("initializeItemEffects", .5f);
-        //initializeItemEffects();
+        //Invoke("initializeItemEffects", .5f);
+        initializeItemEffects();
     }
 
     private void OnEnable()
@@ -111,11 +122,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         attack();
-        if (canFireProjectile)
+        if (canFireProjectile && currentMagic > 0)
         {
             projectileAttack();
         }
-        if (canTurnInvincible)
+        if (canTurnInvincible && currentMagic > 0)
         {
             tempInvincibility();
         }
@@ -194,6 +205,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void takeMagicPoints(int value)
+    {
+        currentMagic -= value;
+
+        magicBar.SetMagic(currentMagic);
+    }
+
     public void gameOver()
     {
         gm.gameOver();
@@ -248,6 +266,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             healthUp(healthIncrease);
+            magicUp(healthIncrease);
         }
 
         // Get leftover exp to keep towards next level up
@@ -267,6 +286,13 @@ public class PlayerMovement : MonoBehaviour
         maxHealth += amount;
         currentHealth += amount;
         healthBar.SetHealth(currentHealth);
+    }
+
+    public void magicUp(int amount)
+    {
+        maxMagic += amount;
+        currentMagic += amount;
+        magicBar.SetMagic(currentMagic);
     }
 
     public void setLevelDisplay()
@@ -356,6 +382,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("isFiringProjectile");
             Instantiate(projectile, (playerHitbox.transform.position + offset), rotation);
+            takeMagicPoints(1);
         }
         isFiringProjectile = false;
     }
