@@ -271,7 +271,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Get leftover exp to keep towards next level up
         exp -= expThreshold;
-
+        
         setLevelDisplay();
     }
 

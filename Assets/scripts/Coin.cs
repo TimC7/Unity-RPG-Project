@@ -66,7 +66,7 @@ public class Coin : MonoBehaviour
             colliderOfCoin.enabled = false;
             playerInventory.addMoney(amountValue);
             Destroy(this.gameObject);
-            Debug.Log("");
+            //Debug.Log("");
             //playerInventory.gold += amountValue;
         }
 

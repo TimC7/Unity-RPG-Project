@@ -27,7 +27,7 @@ public class OverworldEnemy : MonoBehaviour
     public Vector2 Kdirection;
     public Vector2 collisionDirection;
 
-    public bool canMove = true;
+    public bool canMove = true, patrolling = true;
 
     public Vector3 direction;
     private int rando;
@@ -76,7 +76,7 @@ public class OverworldEnemy : MonoBehaviour
             {
                 currentState = State.Chase;
             }
-            else if (Time.time - lastChoice > timeBetweenChoices)
+            else if (Time.time - lastChoice > timeBetweenChoices && patrolling)
             {
                 idleOrMove();
                 lastChoice = Time.time;
@@ -216,6 +216,7 @@ public class OverworldEnemy : MonoBehaviour
 
     public void disableObject()
     {
+        Debug.Log("Disable object called.");
         gameObject.SetActive(false);
     }
 

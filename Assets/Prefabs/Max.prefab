@@ -135,17 +135,21 @@ MonoBehaviour:
   isFiringProjectile: 0
   projectile: {fileID: 8315619156554386807, guid: ad22623f0f0d37145bab72c07659a3c5, type: 3}
   playerHitbox: {fileID: 6305203748998903631}
+  direction: 0
   isAttacking: 0
   inv: {fileID: 0}
   level: 1
   currentHealth: 0
+  currentMagic: 0
   maxHealth: 3
+  maxMagic: 0
   str: 1
   exp: 0
   expIncrement: 30
   healthIncrease: 1
   strIncrease: 1
   healthBar: {fileID: 0}
+  magicBar: {fileID: 0}
   levelDisplay: {fileID: 0}
   strengthDisplay: {fileID: 0}
   invincibilityDuration: 1
@@ -256,7 +260,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6305203748998903631}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

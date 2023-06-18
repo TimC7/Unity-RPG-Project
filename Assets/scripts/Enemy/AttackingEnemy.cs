@@ -33,7 +33,7 @@ public class AttackingEnemy : OverworldEnemy
                 //Debug.Log("setting state to chase.");
                 currentState = State.Chase;
             }
-            else if (Time.time - lastChoice > timeBetweenChoices)
+            else if (Time.time - lastChoice > timeBetweenChoices && patrolling)
             {
                 idleOrMove();
                 lastChoice = Time.time;
