@@ -11,6 +11,7 @@ public class AttackingEnemy : OverworldEnemy
         str = 2;
         //attackRange = 2f;
         isAttacking = false;
+        currentState = State.Idle;
         base.Start();
     }
 
@@ -35,6 +36,7 @@ public class AttackingEnemy : OverworldEnemy
             }
             else if (Time.time - lastChoice > timeBetweenChoices && patrolling)
             {
+                Debug.Log("patrolling is: " + patrolling);
                 idleOrMove();
                 lastChoice = Time.time;
             }

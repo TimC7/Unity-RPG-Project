@@ -55,7 +55,7 @@ public class OverworldEnemy : MonoBehaviour
 
         randomDirection();
         direction.Normalize();
-        currentState = State.Move;
+        //currentState = State.Move;
     }
 
     void Update()
@@ -90,6 +90,7 @@ public class OverworldEnemy : MonoBehaviour
 
     protected virtual void stateMachine()
     {
+        //Debug.Log("currentState is: " + currentState);
         switch (currentState)
         {
             case State.Idle:
@@ -120,6 +121,7 @@ public class OverworldEnemy : MonoBehaviour
 
     protected virtual void move()
     {
+        //Debug.Log("We movin");
         animator.SetTrigger("Moving");
         if (Time.time - lastChange > timeBetweenDirectionChanges)
         {
@@ -162,6 +164,7 @@ public class OverworldEnemy : MonoBehaviour
 
     protected void idleOrMove()
     {
+        //Debug.Log("in idleOrMove()");
         rando = Random.Range(1, 3);
         switch (rando)
         {
