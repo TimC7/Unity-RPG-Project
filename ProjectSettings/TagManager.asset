@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Game Over
   - Coin
+  - door
   layers:
   - Default
   - TransparentFX
