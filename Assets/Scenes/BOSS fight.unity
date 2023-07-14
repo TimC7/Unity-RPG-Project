@@ -18960,9 +18960,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4146950857091899427, guid: 6c01d0fbb9c5a1e4abaf08826ac5e2d7, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: edf6178678ba7684d80e9c92d6e4f74d, type: 2}
     - target: {fileID: 4146950857091899436, guid: 6c01d0fbb9c5a1e4abaf08826ac5e2d7, type: 3}
       propertyPath: m_Name
-      value: Shadow Max
+      value: Dark Max
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c01d0fbb9c5a1e4abaf08826ac5e2d7, type: 3}
