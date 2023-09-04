@@ -31,7 +31,7 @@ public class AttackingEnemy : OverworldEnemy
             }
             else if (Vector3.Distance(transform.position, player.transform.position) < alertRange)
             {
-                //Debug.Log("setting state to chase.");
+                Debug.Log("setting state to chase.");
                 currentState = State.Chase;
             }
             else if (Time.time - lastChoice > timeBetweenChoices && patrolling)

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4146950857091899424}
   - component: {fileID: 4146950857091899425}
   - component: {fileID: 4146950857091899438}
-  - component: {fileID: 4146950857091899439}
   - component: {fileID: 4146950857091899427}
   - component: {fileID: 3437056330242473917}
   - component: {fileID: 3437056330242473916}
@@ -111,52 +110,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &4146950857091899439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4146950857091899436}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0367f030670c494ab4ac0ac9924204f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  animator: {fileID: 4146950857091899427}
-  rb: {fileID: 0}
-  partner: {fileID: 0}
-  mainCamera: {fileID: 4146950857091899436}
-  sr: {fileID: 0}
-  gm: {fileID: 0}
-  canFireProjectile: 0
-  canTurnInvincible: 0
-  isFiringProjectile: 0
-  projectile: {fileID: 8315619156554386807, guid: ad22623f0f0d37145bab72c07659a3c5, type: 3}
-  playerHitbox: {fileID: 7684297140009180183}
-  direction: 0
-  isAttacking: 0
-  inv: {fileID: 0}
-  level: 1
-  currentHealth: 0
-  currentMagic: 0
-  maxHealth: 3
-  maxMagic: 0
-  str: 1
-  exp: 0
-  expIncrement: 30
-  healthIncrease: 1
-  strIncrease: 1
-  healthBar: {fileID: 0}
-  magicBar: {fileID: 0}
-  levelDisplay: {fileID: 0}
-  strengthDisplay: {fileID: 0}
-  invincibilityDuration: 1
-  isInvincible: 0
-  knockBackForce: 10
-  knockBackCounter: 0
-  knockBackTotalTime: 0
 --- !u!95 &4146950857091899427
 Animator:
   serializedVersion: 5
@@ -167,7 +120,7 @@ Animator:
   m_GameObject: {fileID: 4146950857091899436}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9359317b22d27504798c8fb0378643a6, type: 2}
+  m_Controller: {fileID: 9100000, guid: edf6178678ba7684d80e9c92d6e4f74d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -228,7 +181,7 @@ MonoBehaviour:
   Coin: {fileID: 0}
   player: {fileID: 0}
   alertRange: 7
-  attackRange: 0.5
+  attackRange: 3
   currentState: 0
   Kdirection: {x: 0, y: 0}
   collisionDirection: {x: 0, y: 0}
