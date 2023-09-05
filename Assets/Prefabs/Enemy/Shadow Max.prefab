@@ -174,24 +174,31 @@ MonoBehaviour:
   knockBackCounter: 0
   knockBackTotalTime: 0
   spriteRenderer: {fileID: 0}
-  health: 3
-  maxHealth: 3
+  health: 20
+  maxHealth: 20
   str: 1
   expReward: 10
   Coin: {fileID: 0}
   player: {fileID: 0}
-  alertRange: 7
-  attackRange: 3
+  alertRange: 10
+  attackRange: 1.4
   currentState: 0
   Kdirection: {x: 0, y: 0}
   collisionDirection: {x: 0, y: 0}
   canMove: 1
   patrolling: 1
   direction: {x: 0, y: 0, z: 0}
-  speed: 1
+  speed: 5
   timeBetweenChoices: 2
   timeBetweenDirectionChanges: 2
   isAttacking: 0
+  meleeCooldown: 1
+  lastMelee: 0
+  teleportCounter: 0
+  teleportThreshold: 3
+  teleportDistance: 7
+  canFireProjectile: 0
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &7684297140009180183
 GameObject:
   m_ObjectHideFlags: 0

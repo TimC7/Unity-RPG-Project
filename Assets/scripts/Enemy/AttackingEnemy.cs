@@ -5,10 +5,11 @@ using UnityEngine;
 public class AttackingEnemy : OverworldEnemy
 {
     public bool isAttacking = false;
+    public float meleeCooldown = 1f, lastMelee = 0f;
     protected override void Start()
     {
-        health = 5;
-        str = 2;
+        health = maxHealth;
+        //str = 2;
         //attackRange = 2f;
         isAttacking = false;
         currentState = State.Idle;
@@ -24,19 +25,20 @@ public class AttackingEnemy : OverworldEnemy
             {
                 currentState = State.Pain;
             }
-            else if (Vector3.Distance(transform.position, player.transform.position) < attackRange)
+            else if (Vector3.Distance(transform.position, player.transform.position) < attackRange && (Time.time - lastMelee > meleeCooldown))
             {
-                Debug.Log("setting state to attack.");
+                //Debug.Log("setting state to attack.");
+                lastMelee = Time.time;
                 currentState = State.Attack;
             }
             else if (Vector3.Distance(transform.position, player.transform.position) < alertRange)
             {
-                Debug.Log("setting state to chase.");
+                //Debug.Log("setting state to chase.");
                 currentState = State.Chase;
             }
             else if (Time.time - lastChoice > timeBetweenChoices && patrolling)
             {
-                Debug.Log("patrolling is: " + patrolling);
+                //Debug.Log("patrolling is: " + patrolling);
                 idleOrMove();
                 lastChoice = Time.time;
             }
