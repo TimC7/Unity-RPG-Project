@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class BossLevelManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Transform spawnPoint;
+
+    public GameObject bigGoop;
+    public GameObject darkMaxIntro;
+
+    public GameObject darkMax;
     void Start()
     {
-        
+        bigGoop.GetComponent<OverworldEnemy>().OnEnemyDefeated += spawnDarkMaxIntro;
+        darkMaxIntro.GetComponent<BossIntro>().OnDefeated += spawnDarkMax;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void spawnDarkMaxIntro()
     {
-        
+        darkMaxIntro.SetActive(true);
+        darkMaxIntro.transform.position = spawnPoint.position;
     }
+
+    public void spawnDarkMax()
+    {
+        darkMax.SetActive(true);
+        darkMax.transform.position = spawnPoint.position;
+    }    
 }

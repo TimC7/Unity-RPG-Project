@@ -422,10 +422,14 @@ public class PlayerMovement : MonoBehaviour
             knockBackCounter = knockBackTotalTime;
             if (col.gameObject.GetComponent<OverworldEnemy>() != null)
             {
+                Debug.Log("Enemy has OverworldEnemy script or derivative");
                 takeDamage(col.gameObject.GetComponent<OverworldEnemy>().str);
             }
             else
-            { Debug.Log("Enemy does not have OverworldEnemy script"); }
+            { 
+                Debug.Log("Enemy does not have OverworldEnemy script or derivative");
+                takeDamage(1);
+            }
         }
 
         if (col.gameObject.CompareTag("Coin"))

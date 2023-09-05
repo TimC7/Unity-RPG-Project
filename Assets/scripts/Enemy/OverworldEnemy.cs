@@ -40,6 +40,9 @@ public class OverworldEnemy : MonoBehaviour
     protected float lastXDirection = 1;
     protected float lastYDirection = 1;
     
+    public delegate void EnemyDefeatedEventHandler();
+
+    public event EnemyDefeatedEventHandler OnEnemyDefeated;
 
     protected virtual void Start()
     {
@@ -184,6 +187,7 @@ public class OverworldEnemy : MonoBehaviour
         StartCoroutine(ResetColorAfterDelay(0.5f));
         if (health <= 0 && gameObject.CompareTag("Enemy"))
         {
+            OnEnemyDefeated?.Invoke();
             canMove = false;
             rb.velocity = Vector2.zero;
             Instantiate(Coin, transform.position, Quaternion.identity);
