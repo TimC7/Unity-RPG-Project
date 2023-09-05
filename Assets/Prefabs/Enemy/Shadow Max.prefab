@@ -197,7 +197,10 @@ MonoBehaviour:
   teleportCounter: 0
   teleportThreshold: 3
   teleportDistance: 7
+  originalAttackRange: 0
   canFireProjectile: 0
+  projectile: {fileID: 8315619156554386807, guid: ad22623f0f0d37145bab72c07659a3c5, type: 3}
+  bossHitbox: {fileID: 7684297140009180183}
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &7684297140009180183
 GameObject:

@@ -62,7 +62,7 @@ public class AttackingEnemy : OverworldEnemy
 
     protected override void attack()
     {
-        Debug.Log("In attack().");
+        //Debug.Log("In attack().");
         if (canMove)
         {
             //canMove = false;

@@ -8,9 +8,11 @@ public class BossEnemy : AttackingEnemy
     public int teleportCounter, teleportThreshold = 3;
     public float teleportDistance = 8f, originalAttackRange;
     public bool canFireProjectile = false;
+    public GameObject projectile;
     Quaternion rotation = Quaternion.Euler(0, 0, 0);
     Vector3 offset = Vector3.zero;
-
+    private int idirection;
+    public GameObject bossHitbox;
     public Color defaultColor;
 
     protected override void Start()
@@ -63,11 +65,13 @@ public class BossEnemy : AttackingEnemy
 
             if (teleportCounter % 2 == 0)
             {
+                canFireProjectile = true;
                 projectileAttack();
             }
             else
             {
                 attackRange = originalAttackRange;
+                canFireProjectile = false;
             }
         }
     }
@@ -95,17 +99,18 @@ public class BossEnemy : AttackingEnemy
     {
         attackRange *= 5;
     }
-/*
+
     public void fireProjectile()
     {
-        switch (direction)
+        directionToSwitch();
+        switch (idirection)
         {
             case 1:
                 offset = new Vector3(.1f, 0f, 0f);
                 rotation = Quaternion.Euler(0, 0, 180);
                 break;
             case 2:
-                offset = new Vector3(0f, -.1f, 0f);
+                offset = new Vector3(0f, .1f, 0f);
                 rotation = Quaternion.Euler(0, 0, 90);
                 break;
             case 3:
@@ -117,14 +122,47 @@ public class BossEnemy : AttackingEnemy
                 rotation = Quaternion.Euler(0, 0, -90);
                 break;
         }
-        Debug.Log("fireProjectile called.");
-        if (isFiringProjectile)
+        Debug.Log("Dark Max fireProjectile() called.");
+        if (canFireProjectile)
         {
-            Debug.Log("isFiringProjectile");
-            Instantiate(projectile, (playerHitbox.transform.position + offset), rotation);
-            takeMagicPoints(1);
+            Instantiate(projectile, (bossHitbox.transform.position + offset), rotation);
         }
-        isFiringProjectile = false;
     }
-    */
+    
+    private void directionToSwitch()
+    {
+        Debug.Log("Dark Max directionToSwitch() called.");
+
+
+        float angleToRight = Vector2.SignedAngle(Vector2.right, direction);
+        float angleToLeft = Vector2.SignedAngle(Vector2.left, direction);
+        float angleToUp = Vector2.SignedAngle(Vector2.up, direction);
+        float angleToDown = Vector2.SignedAngle(Vector2.down, direction);
+
+
+        if (Mathf.Abs(angleToRight) < 45f)
+        {
+            idirection = 2;
+            Debug.Log("Choosing right");
+        }
+        else if (Mathf.Abs(angleToLeft) < 45f)
+        {
+            idirection = 4;
+            Debug.Log("Choosing left");
+        }
+        else if (Mathf.Abs(angleToUp) < 45f)
+        {
+            idirection = 1;
+            Debug.Log("Choosing up");
+        }
+        else if (Mathf.Abs(angleToDown) < 45f)
+        {
+            idirection = 3;
+            Debug.Log("Choosing down");
+        }
+        else
+        {
+            Debug.Log("No specific cardinal direction");
+        }
+    }
 }
