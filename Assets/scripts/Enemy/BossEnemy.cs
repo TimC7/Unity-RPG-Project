@@ -14,8 +14,8 @@ public class BossEnemy : AttackingEnemy
     private int idirection;
     public GameObject bossHitbox;
     public Color defaultColor;
-    public delegate void EnemyDefeatedEventHandler1();
-    public event EnemyDefeatedEventHandler1 OnEnemyDefeated1;
+    public delegate void BossDefeatedEventHandler();
+    public event BossDefeatedEventHandler OnDarkMaxDefeated;
     
     protected override void Start()
     {
@@ -29,21 +29,18 @@ public class BossEnemy : AttackingEnemy
 
         spriteRenderer.color = Color.red;
         teleportCounter++;
-        if (health <= 0 && gameObject.CompareTag("Enemy"))
+        if (health <= 0)
         {
-            OnEnemyDefeated1?.Invoke();
+            OnDarkMaxDefeated?.Invoke();
             canMove = false;
             rb.velocity = Vector2.zero;
-            Instantiate(Coin, transform.position, Quaternion.identity);
+            //Instantiate(Coin, transform.position, Quaternion.identity);
             player.GetComponent<PlayerMovement>().addExp(expReward);
             gameObject.tag = "Untagged";
             animator.SetTrigger("Death"); //disabled object called from animation
         }
-
         else
             StartCoroutine(takeDamageBehavior(0.5f));
-
-
     }
 
     private IEnumerator takeDamageBehavior(float delay)

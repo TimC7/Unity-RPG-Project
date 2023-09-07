@@ -67,7 +67,7 @@ public class AttackingEnemy : OverworldEnemy
         {
             //canMove = false;
             animator.SetTrigger("Attack");
-            Debug.Log("setting attack trigger");
+            //Debug.Log("setting attack trigger");
         }
     }
 
