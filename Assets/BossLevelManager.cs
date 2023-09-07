@@ -8,10 +8,11 @@ public class BossLevelManager : MonoBehaviour
 
     public GameObject bigGoop;
     public GameObject darkMaxIntro;
-
+    public GameObject HolyGrilledCheese;
     public GameObject darkMax;
     void Start()
     {
+        darkMax.GetComponent<OverworldEnemy>().OnEnemyDefeated += GrilledCheeseSpawn;
         bigGoop.GetComponent<OverworldEnemy>().OnEnemyDefeated += spawnDarkMaxIntro;
         darkMaxIntro.GetComponent<BossIntro>().OnDefeated += spawnDarkMax;
     }
@@ -26,5 +27,12 @@ public class BossLevelManager : MonoBehaviour
     {
         darkMax.SetActive(true);
         darkMax.transform.position = spawnPoint.position;
-    }    
+        
+    }
+    
+    public void GrilledCheeseSpawn()
+    {
+        HolyGrilledCheese.transform.position = spawnPoint.position;
+        Debug.Log("queso");
+    }
 }

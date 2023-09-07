@@ -14,6 +14,7 @@ public class BossEnemy : AttackingEnemy
     private int idirection;
     public GameObject bossHitbox;
     public Color defaultColor;
+    public event EnemyDefeatedEventHandler OnEnemyDefeated1;
 
     protected override void Start()
     {
@@ -30,6 +31,7 @@ public class BossEnemy : AttackingEnemy
         StartCoroutine(takeDamageBehavior(0.5f));
         if (health <= 0 && gameObject.CompareTag("Enemy"))
         {
+            OnEnemyDefeated1?.Invoke();
             canMove = false;
             rb.velocity = Vector2.zero;
             Instantiate(Coin, transform.position, Quaternion.identity);

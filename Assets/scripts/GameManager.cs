@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public SaveLoadManager sl;
     public PlayerMovement max;//, lucia;
     public GameObject gameOverScreen;
+
+    
     public void Awake()
     {
         sl = GameObject.Find("SaveLoadManager").GetComponent<SaveLoadManager>();
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
             sl.loadGame();
             //max.refillHealth();
         }
+
+        
     }
 
     public void gameOver()

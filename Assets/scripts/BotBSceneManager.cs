@@ -7,6 +7,7 @@ public class BotBSceneManager : MonoBehaviour
 {
     public TilemapRenderer door;
     public int keys, keysNeeded = 2;
+    
 
     public void addKey()
     {
@@ -20,4 +21,5 @@ public class BotBSceneManager : MonoBehaviour
             door.enabled = false;
         }
     }
+
 }
