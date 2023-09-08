@@ -396,10 +396,12 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log(inv.inventory[i]);
         }
         Debug.Log("What inventory needs for projectile attack: " + inv.projectileUpgrade);
+
         if (inv.inventory.Contains(inv.speedUpgrade))
         {
-            speed *= .5f;
+            speed *= 1.5f;
         }
+
         if (inv.inventory.Contains(inv.projectileUpgrade))
         {
             canFireProjectile = true;

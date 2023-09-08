@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class BotBSceneManager : MonoBehaviour
 {
-    public TilemapRenderer door;
+    public GameObject door;
     public int keys, keysNeeded = 2;
     
 
@@ -18,7 +18,7 @@ public class BotBSceneManager : MonoBehaviour
     {
         if (keys >= keysNeeded)
         {
-            door.enabled = false;
+            door.SetActive(false);
         }
     }
 
